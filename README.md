@@ -1,1 +1,2 @@
-# plugins-india
+# :zap: plugins-india
+Examples & Samples
