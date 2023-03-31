@@ -7,6 +7,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Tcb from "./TwelveCheckBoxes"
 import { TextField } from "@mui/material";
+import  { useState } from "react";
+import ReactDOM from "react-dom";
+
+var dchecked = {val:false};
 
 export default function CheckboxesGroup() {
   const [state, setState] = React.useState({
@@ -22,10 +26,24 @@ export default function CheckboxesGroup() {
       ...state,
       [event.target.name]: event.target.checked
     });
+   
+    if(event.target.name=="a")
+      {setIsDisabled(!isDisabled)}
+      if(event.target.name=="c")
+      {setIsDisabledC(!isDisabledC)}
+      if(event.target.name=="d")
+      {setIsDisabledD(!isDisabledD)}
+      if(event.target.name=="e")
+      {setIsDisabledE(!isDisabledE)}
   };
-
+  const [isDisabled, setIsDisabled] = React.useState(true);
+  const [isDisabledC, setIsDisabledC] = React.useState(true);
+  const [isDisabledD, setIsDisabledD] = React.useState(false);
+  const [isDisabledE, setIsDisabledE] = React.useState(false);
   const { a, b, c, d, e } = state;
   const error = [a, b, c, d, e].filter((v) => v).length !== 5;
+ 
+  
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -48,6 +66,7 @@ export default function CheckboxesGroup() {
                           }}
                           id="outlined-basic"
                           variant="standard"
+                          disabled={isDisabled}
                       ></TextField>
                       
 
@@ -75,21 +94,24 @@ export default function CheckboxesGroup() {
 
                     id="outlined-basic"
                     variant="standard"
+                    disabled={isDisabledC}
                 ></TextField>
                 
                 </Box>
           <FormControlLabel
             control={<Checkbox checked={d} onChange={handleChange} name="d" />}
             label="With Restrained Supports"
+           
           />
-          <Tcb/>
+          <Tcb isDisabledSC={!isDisabledD}/>
+
           <FormControlLabel
             control={<Checkbox checked={e} onChange={handleChange} name="e" />}
             label="With Beam End Offset"
           />
-                     <Box sx={{ ml: 40 }}>
+                     <Box disabled={isDisabledE} sx={{ ml: 40 }}>
 
-                      <FormLabel>Start</FormLabel>
+                      <FormLabel disabled={isDisabledE}>Start</FormLabel>
                       <TextField
                           sx={{
                               width: {
@@ -102,13 +124,14 @@ export default function CheckboxesGroup() {
 
                           id="outlined-basic"
                           variant="standard"
+                          disabled={isDisabledE}
                       ></TextField>
-                      <FormLabel>m</FormLabel>
+                      <FormLabel disabled={isDisabledE}>m</FormLabel>
                   </Box>
 
-                  <Box sx={{ ml: 40, mt: 2 }}>
-                      <FormLabel>End</FormLabel>
-                      <TextField
+                  <Box disabled={isDisabledE} sx={{ ml: 40, mt: 2 }}>
+                      <FormLabel disabled={isDisabledE}>End</FormLabel>
+                      <TextField disabled={isDisabledE}
                           sx={{
                               width: {
                                   sm: 100,
@@ -119,8 +142,9 @@ export default function CheckboxesGroup() {
                           }}
                           id="outlined-basic"
                           variant="standard"
+                          
                       ></TextField>
-                      <FormLabel>m</FormLabel>
+                      <FormLabel disabled={isDisabledE}>m</FormLabel>
                 </Box>
         </FormGroup>
         {/* <FormHelperText>Be careful</FormHelperText> */}
@@ -161,24 +185,3 @@ export default function CheckboxesGroup() {
   );
 }
 
-// import * as React from 'react';
-// import FormGroup from '@mui/material/FormGroup';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import Checkbox from '@mui/material/Checkbox';
-// import { TextField } from '@mui/material';
-// import { useState } from "react";
-
-// export default function CheckboxLabels() {
-//     const [checked, setChecked] = useState(false);
-//     const [text, setText] = useState("");
-//   return (
-//     <FormGroup sx={{ml:-20,mt:3}}>
-//       <FormControlLabel control={<Checkbox defaultChecked />} label="With Sructural Group" />
-//       <TextField sx={{width: { sm: 100, marginLeft: 500, marginTop: 10, position: "absolute" } ,ml:70,marginTop:-2 ,'& .MuiTextField-root': { m: 1, width: '25ch' ,height:45}}}></TextField>
-//       <FormControlLabel control={<Checkbox />} label="With Node Local Axis" />
-//       <FormControlLabel  control={<Checkbox />} label="With Notional Size" />
-//       <FormControlLabel  control={<Checkbox />} label="With Restrained Supports" />
-//       <FormControlLabel  control={<Checkbox />} label="With Beam End Offset" />
-//     </FormGroup>
-//   );
-// }
