@@ -7,6 +7,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { TextField } from "@mui/material";
 import NestedCheckBox from "./nestedcheckbox";
+var transfervariable =false
 export default function CheckboxesGroup() {
   const [state, setState] = React.useState({
     a: false,
@@ -16,6 +17,11 @@ export default function CheckboxesGroup() {
     e: false
   });
 
+  const [isDisabled, setIsDisabled] = React.useState(false);
+  const [isDisabled2, setIsDisabled2] = React.useState(false);
+  const [isDisabled3, setIsDisabled3] = React.useState(false);
+  const [isDisabled4, setIsDisabled4] = React.useState(false);
+  
   const handleChange = (event) => {
     setState({
       ...state,
@@ -23,12 +29,29 @@ export default function CheckboxesGroup() {
       
     });
     
-    if(event.target.name=="a" && event.target.checked )
-    {
-       document.getElementById("StructuralGroupText").TextField.disabled=!event.target.checked;
-    }
-  
+   if(event.target.name=="a")
+   {
+        setIsDisabled(!isDisabled)
+        
+   }
 
+   if(event.target.name=="c")
+   {
+        setIsDisabled2(!isDisabled2)
+   }
+
+   if(event.target.name=="d")
+   {
+    
+    setIsDisabled3(!isDisabled3)
+  
+   }
+   if(event.target.name=="e")
+   {
+    
+    setIsDisabled4(!isDisabled4)
+  
+   }
   };
 
   const { a, b, c, d, e } = state;
@@ -46,7 +69,7 @@ export default function CheckboxesGroup() {
             control={<Checkbox checked={a} onChange={handleChange} name="a" />}
             label="with Structural group"
           />
-         <TextField id="StructuralGroupText" disabled={true}
+         <TextField id="StructuralGroupText" disabled={!isDisabled} 
               sx={{
                 width: {
                   sm: 100,
@@ -67,18 +90,34 @@ export default function CheckboxesGroup() {
             control={<Checkbox checked={c} onChange={handleChange} name="c" />}
             label="with Notional size"
           />
+          <Box sx={{ ml: 40 ,mt :12, position:"absolute" }}><FormLabel>a=</FormLabel></Box>
+           
+           <TextField id="a-value" disabled={!isDisabled2} 
+              sx={{
+                width: {
+                  sm: 100,
+                  marginLeft:350,
+                  marginTop: 80,
+                  position:"absolute"
+                },
+                "& .MuiInputBase-root": { height: 35 }
+              }}
+              
+              variant="standard"
+            ></TextField>
           <FormControlLabel
             control={<Checkbox checked={d} onChange={handleChange} name="d" />}
             label="with Restraint Supports"
           />
-          <NestedCheckBox />
+          <NestedCheckBox isDisabled3={!isDisabled3} />
           <FormControlLabel
             control={<Checkbox checked={e} onChange={handleChange} name="e" />}
             label="with Beam End Offset"
           />
           <Box sx={{ ml: 30 }}>
-            <FormLabel>Start</FormLabel>
+            <FormLabel disabled={!isDisabled4}>Start</FormLabel>
             <TextField
+            disabled={!isDisabled4}
               sx={{
                 width: {
                   sm: 100,
@@ -90,11 +129,12 @@ export default function CheckboxesGroup() {
               id="outlined-basic"
               variant="standard"
             ></TextField>
-            <FormLabel>m</FormLabel>
+            <FormLabel disabled={!isDisabled4}>m</FormLabel>
           </Box>
-          <Box sx={{ ml: 30, mt: 2 }}>
-            <FormLabel>End</FormLabel>
+          <Box  sx={{ ml: 30, mt: 2 }}>
+            <FormLabel disabled={!isDisabled4}>End</FormLabel>
             <TextField
+            disabled={!isDisabled4}
               sx={{
                 width: {
                   sm: 100,
@@ -106,7 +146,7 @@ export default function CheckboxesGroup() {
               id="outlined-basic"
               variant="standard"
             ></TextField>
-            <FormLabel>m</FormLabel>
+            <FormLabel disabled={!isDisabled4}>m</FormLabel>
           </Box>
         </FormGroup>
       </FormControl>
