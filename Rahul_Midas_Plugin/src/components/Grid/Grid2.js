@@ -32,14 +32,14 @@ export default function AutoGrid() {
           <Item sx={{ marginLeft: 10  }}>
             <Box sx={{ marginTop: 2  } }>
               <Label sx={{ml:-50,marginTop:0,position:'absolute'}} >Unit-Length</Label>
-              <UnitDropDown id="idlist3" sx={{marginTop:10 }} />
+              <UnitDropDown  sx={{marginTop:10 }} />
               <Divider sx={{height:10,borderBottomWidth: 3 }} />
             </Box>
             <Box sx={{ marginTop: 2  } }>
               <Label sx={{ml:-50,marginTop:0,position:'absolute'}} >Material</Label>
-              <MaterialDropDown sx={{ marginTop:10}} />
+              <MaterialDropDown  sx={{ marginTop:10}} />
               <Label sx={{ml:-50,marginTop:1,position:'absolute'}} >Section</Label>
-              <SectionDropDown sx={{ marginTop:10}} />
+              <SectionDropDown  sx={{ marginTop:10}} />
               <Divider sx={{height:10,borderBottomWidth: 3 }} />
             </Box>
             <Box sx={{ marginTop: 2  } }>
@@ -47,8 +47,7 @@ export default function AutoGrid() {
               <Divmethod sx={{marginTop:10 }}/>
               <Label id="Labelid1" sx={{ml:-50,marginTop:1,position:'absolute'}} >Number of element</Label>
               <Textfield  sx={{ width: { sm: 100, marginLeft: 265, marginTop: 10, position: "absolute" }, "& .MuiInputBase-root": { height: 35 } }}
-              
-              id="outlined-basic"
+              id="Number_Of_Elements"
               variant="standard"></Textfield>
               <Divider sx={{height:10,borderBottomWidth: 3,marginTop:5 }} />
               <Label id="Labelid2" sx={{ml:45,marginTop:-5,position:'absolute'}} >m</Label>

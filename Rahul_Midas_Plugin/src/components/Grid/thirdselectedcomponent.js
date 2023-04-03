@@ -18,16 +18,14 @@ export default function SelectVariants() {
       <FormControl variant="standard" sx={{ marginLeft:80, mt: -1,backgroundColor:"snow", minWidth:50  ,alignItems:"flex-end" }}>
         <Select
           labelId="demo-simple-select-standard-label"
-          id="demo-simple-select-standard"
+          id="Section"
           value={age}
           onChange={handleChange}
           label="m"
         >
           <MenuItem value={10}>200x300</MenuItem>
           <MenuItem value={20}>300x300</MenuItem>
-          <MenuItem value={25}>400x450</MenuItem>
-          <MenuItem value={30}>500x500</MenuItem>
-  
+
         </Select>
       </FormControl>
     </div>

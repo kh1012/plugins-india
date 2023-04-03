@@ -18,7 +18,7 @@ export default function SelectVariants() {
       <FormControl variant="standard" sx={{ marginLeft:80, mt: -1,backgroundColor:"snow", minWidth:50  ,alignItems:"flex-end" }}>
         <Select
           labelId="demo-simple-select-standard-label"
-          id="demo-simple-select-standard1"
+          id="Units"
           value={age}
           onChange={handleChange}
           label="m"

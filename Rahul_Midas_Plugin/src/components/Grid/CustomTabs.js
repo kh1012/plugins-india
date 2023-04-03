@@ -83,38 +83,38 @@ export default function FullWidthTabs() {
             <Label sx={{ marginTop: 3, position: "absolute" }}>Start Node</Label>
             <TextField
               sx={{ width: { sm: 100, marginLeft: 350, marginTop: 10, position: "absolute" }, "& .MuiInputBase-root": { height: 35 } }}
-              id="outlined-basic"
+              id="Coordinate_Start_Number"
               variant="standard"
             />
             <TextField
               sx={{ width: { sm: 100, marginLeft: 500, marginTop: 10, position: "absolute" }, "& .MuiInputBase-root": { height: 35 } }}
-              id="outlined-basic"
+              id="Coordinate_Start_Coordinate"
               variant="standard"
             />
             {/**/}
             <Label sx={{ marginTop: 10, position: "absolute" }}>End Node</Label>
             <TextField
               sx={{ width: { sm: 100, marginLeft: 350, marginTop: 65, position: "absolute" }, "& .MuiInputBase-root": { height: 35 } }}
-              id="outlined-basic"
+              id="Coordinate_End_Number"
               variant="standard"
             />
             <TextField
               sx={{ width: { sm: 100, marginLeft: 500, marginTop: 65, position: "absolute" }, "& .MuiInputBase-root": { height: 35 } }}
-              id="outlined-basic"
+              id="Coordinate_End_Coordinate"
               variant="standard"
             />
             {/**/}
             <Label sx={{ marginTop: 17, position: "absolute" }}>Total Length of elements</Label>
             <TextField
               sx={{ width: { sm: 100, marginLeft: 350, marginTop: 130, position: "absolute" }, "& .MuiInputBase-root": { height: 35 } }}
-              id="outlined-basic"
+              id="Coordinate_Length_Of_Elements"
               variant="standard"
             />
-            <TextField
+            {/* <TextField
               sx={{ width: { sm: 100, marginLeft: 500, marginTop: 65, position: "absolute" }, "& .MuiInputBase-root": { height: 35 } }}
               id="outlined-basic"
               variant="standard"
-            />
+            /> */}
             <Label sx={{ paddingLeft: 57, marginTop: 17, position: "absolute" }}>m</Label>
           </Box>
 
@@ -126,7 +126,7 @@ export default function FullWidthTabs() {
 
             <TextField
               sx={{ width: { sm: 100, marginLeft: 500, marginTop: 10, position: "absolute" }, "& .MuiInputBase-root": { height: 35 } }}
-              id="outlined-basic"
+              id="Node_Start_Node"
               variant="standard"
             />
             {/**/}
@@ -134,15 +134,15 @@ export default function FullWidthTabs() {
 
             <TextField
               sx={{ width: { sm: 100, marginLeft: 500, marginTop: 65, position: "absolute" }, "& .MuiInputBase-root": { height: 35 } }}
-              id="outlined-basic"
+              id="Node_End_Node"
               variant="standard"
             />
             {/**/}
             <Label sx={{ marginTop: 17, position: "absolute" }}>Total Length of elements</Label>
 
             <TextField
-              sx={{ width: { sm: 100, marginLeft: 500, marginTop: 65, position: "absolute" }, "& .MuiInputBase-root": { height: 35 } }}
-              id="outlined-basic"
+              sx={{ width: { sm: 100, marginLeft: 500, marginTop: 125, position: "absolute" }, "& .MuiInputBase-root": { height: 35 } }}
+              id="Node_Length_Of_Elements"
               variant="standard"
             />
             <Label sx={{ paddingLeft: 77, marginTop: 17, position: "absolute" }}>m</Label>

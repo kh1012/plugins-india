@@ -66,10 +66,11 @@ export default function CheckboxesGroup() {
         
         <FormGroup>
           <FormControlLabel
-            control={<Checkbox checked={a} onChange={handleChange} name="a" />}
+            control={<Checkbox  id="CB_StructuralGp" checked={a} onChange={handleChange} name="a" />}
+           
             label="with Structural group"
           />
-         <TextField id="StructuralGroupText" disabled={!isDisabled} 
+         <TextField id="Text_StructuralGp" disabled={!isDisabled} 
               sx={{
                 width: {
                   sm: 100,
@@ -83,16 +84,17 @@ export default function CheckboxesGroup() {
               variant="standard"
             ></TextField>
           <FormControlLabel
-            control={<Checkbox checked={b} onChange={handleChange} name="b" />}
+            control={<Checkbox  id="CB_NodeLoacalAxis" checked={b} onChange={handleChange} name="b" />}
+           
             label="with Node Local axis"
           />
           <FormControlLabel
-            control={<Checkbox checked={c} onChange={handleChange} name="c" />}
+            control={<Checkbox  id="CB_Notionalsize" checked={c} onChange={handleChange} name="c" />}
             label="with Notional size"
           />
           <Box sx={{ ml: 40 ,mt :12, position:"absolute" }}><FormLabel>a=</FormLabel></Box>
            
-           <TextField id="a-value" disabled={!isDisabled2} 
+           <TextField id="Text_Notionalsize" disabled={!isDisabled2} 
               sx={{
                 width: {
                   sm: 100,
@@ -106,17 +108,17 @@ export default function CheckboxesGroup() {
               variant="standard"
             ></TextField>
           <FormControlLabel
-            control={<Checkbox checked={d} onChange={handleChange} name="d" />}
+            control={<Checkbox id="CB_RestraintsSupports" checked={d} onChange={handleChange} name="d" />}
             label="with Restraint Supports"
           />
           <NestedCheckBox isDisabled3={!isDisabled3} />
           <FormControlLabel
-            control={<Checkbox checked={e} onChange={handleChange} name="e" />}
+            control={<Checkbox id="CB_BeamEndOffset" checked={e} onChange={handleChange} name="e" />}
             label="with Beam End Offset"
           />
           <Box sx={{ ml: 30 }}>
             <FormLabel disabled={!isDisabled4}>Start</FormLabel>
-            <TextField
+            <TextField 
             disabled={!isDisabled4}
               sx={{
                 width: {
@@ -126,7 +128,7 @@ export default function CheckboxesGroup() {
                 },
                 "& .MuiInputBase-root": { height: 35 }
               }}
-              id="outlined-basic"
+              id="StartOffset"
               variant="standard"
             ></TextField>
             <FormLabel disabled={!isDisabled4}>m</FormLabel>
@@ -135,6 +137,7 @@ export default function CheckboxesGroup() {
             <FormLabel disabled={!isDisabled4}>End</FormLabel>
             <TextField
             disabled={!isDisabled4}
+            
               sx={{
                 width: {
                   sm: 100,
@@ -143,7 +146,7 @@ export default function CheckboxesGroup() {
                 },
                 "& .MuiInputBase-root": { height: 35 }
               }}
-              id="outlined-basic"
+              id="EndOffset"
               variant="standard"
             ></TextField>
             <FormLabel disabled={!isDisabled4}>m</FormLabel>

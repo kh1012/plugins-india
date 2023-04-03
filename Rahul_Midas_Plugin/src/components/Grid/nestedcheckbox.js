@@ -22,21 +22,21 @@ console.log("sdfhhjkdsf:{0}",props.isDisabled3)
       </Box>
       <div>
         <FormLabel disabled={props.isDisabled3} > Start</FormLabel>
-        <Checkbox  disabled={props.isDisabled3} {...label} color="default" />
-        <Checkbox disabled={props.isDisabled3} {...label} color="default" />
-        <Checkbox disabled={props.isDisabled3} {...label} color="default" />
-        <Checkbox disabled={props.isDisabled3} {...label} color="default" />
-        <Checkbox disabled={props.isDisabled3} {...label} color="default" />
-        <Checkbox disabled={props.isDisabled3} {...label} color="default" />
-      </div>
+        <Checkbox id="SFX" disabled={props.isDisabled3} {...label} color="default" />
+        <Checkbox id="SFY" disabled={props.isDisabled3} {...label} color="default" />
+        <Checkbox id="SFZ" disabled={props.isDisabled3} {...label} color="default" />
+        <Checkbox id="SMX" disabled={props.isDisabled3} {...label} color="default" />
+        <Checkbox id="SMY" disabled={props.isDisabled3} {...label} color="default" />
+        <Checkbox id="SMZ" disabled={props.isDisabled3} {...label} color="default" />
       <div>
+      </div>
         <FormLabel disabled={props.isDisabled3}> End </FormLabel>
-        <Checkbox {...label} color="default" />
-        <Checkbox {...label} color="default" />
-        <Checkbox {...label} color="default" />
-        <Checkbox {...label} color="default" />
-        <Checkbox {...label} color="default" />
-        <Checkbox {...label} color="default" />
+        <Checkbox id="EFX" {...label} color="default" />
+        <Checkbox id="EFY" {...label} color="default" />
+        <Checkbox id="EFZ" {...label} color="default" />
+        <Checkbox id="EMX" {...label} color="default" />
+        <Checkbox id="EMY" {...label} color="default" />
+        <Checkbox id="EMZ" {...label} color="default" />
       </div>
     </Box>
   );
