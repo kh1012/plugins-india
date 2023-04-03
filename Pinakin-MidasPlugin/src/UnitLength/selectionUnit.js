@@ -16,7 +16,7 @@ export default function SelectSmall() {
       {/* <InputLabel id="demo-select-small">Age</InputLabel> */}
       <Select sx={{minWidth: 120,ml:60,position:'absolute',mt:-4}} 
                             labelId="demo-select-small"
-                            id="demo-select-small"
+                            id="units"
                             // value={age}
                             // label="Age"
                             onChange={handleChange}

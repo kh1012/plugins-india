@@ -39,7 +39,7 @@ export default function CheckboxesGroup() {
   const [isDisabled, setIsDisabled] = React.useState(true);
   const [isDisabledC, setIsDisabledC] = React.useState(true);
   const [isDisabledD, setIsDisabledD] = React.useState(false);
-  const [isDisabledE, setIsDisabledE] = React.useState(false);
+  const [isDisabledE, setIsDisabledE] = React.useState(true);
   const { a, b, c, d, e } = state;
   const error = [a, b, c, d, e].filter((v) => v).length !== 5;
  
@@ -51,20 +51,22 @@ export default function CheckboxesGroup() {
         <FormLabel component="legend">Options</FormLabel>
         <FormGroup>
           <FormControlLabel
-            control={<Checkbox checked={a} onChange={handleChange} name="a" />}
+            control={<Checkbox id={"chk_a"} checked={a} onChange={handleChange} name="a" />}
             label="With Structural Group"
           />
                   <Box sx={{ ml: 40,mt:2,position:'absolute'}}>                     
                       <TextField
+                          id="strgrp"
                           sx={{
                               width: {
                                   sm: 100,
                                   marginLeft: 50,
-                                  marginTop: -15
+                                  marginTop: -15,
+                                  
                               },
                               "& .MuiInputBase-root": { height: 35 }
                           }}
-                          id="outlined-basic"
+                          
                           variant="standard"
                           disabled={isDisabled}
                       ></TextField>
@@ -73,11 +75,11 @@ export default function CheckboxesGroup() {
                   </Box>
 
           <FormControlLabel
-            control={<Checkbox checked={b} onChange={handleChange} name="b" />}
+            control={<Checkbox id={"chk_b"} checked={b} onChange={handleChange} name="b" />}
             label="With Node Local Axis"
           />
           <FormControlLabel
-            control={<Checkbox checked={c} onChange={handleChange} name="c" />}
+            control={<Checkbox id={"chk_c"} checked={c} onChange={handleChange} name="c" />}
             label="With Notional Size"
           />
                 <Box sx={{ ml: 40 ,mt:11,position:'absolute'}}>
@@ -87,26 +89,27 @@ export default function CheckboxesGroup() {
                         width: {
                             sm: 100,
                             marginLeft: 25,
-                            marginTop: -15
+                            marginTop: -15,
+                            
                         },
                         "& .MuiInputBase-root": { height: 35 }
                     }}
 
-                    id="outlined-basic"
+                    id="notionalsize"
                     variant="standard"
                     disabled={isDisabledC}
                 ></TextField>
                 
                 </Box>
           <FormControlLabel
-            control={<Checkbox checked={d} onChange={handleChange} name="d" />}
+            control={<Checkbox id={"chk_d"} checked={d} onChange={handleChange} name="d" />}
             label="With Restrained Supports"
            
           />
           <Tcb isDisabledSC={!isDisabledD}/>
 
           <FormControlLabel
-            control={<Checkbox checked={e} onChange={handleChange} name="e" />}
+            control={<Checkbox id={"chk_e"} checked={e} onChange={handleChange} name="e" />}
             label="With Beam End Offset"
           />
                      <Box disabled={isDisabledE} sx={{ ml: 40 }}>
@@ -117,12 +120,13 @@ export default function CheckboxesGroup() {
                               width: {
                                   sm: 100,
                                   marginLeft: 50,
-                                  marginTop: -15
+                                  marginTop: -15,
+                                  
                               },
                               "& .MuiInputBase-root": { height: 35 }
                           }}
 
-                          id="outlined-basic"
+                          id="beamendoffset_start"
                           variant="standard"
                           disabled={isDisabledE}
                       ></TextField>
@@ -136,11 +140,12 @@ export default function CheckboxesGroup() {
                               width: {
                                   sm: 100,
                                   marginLeft: 55,
-                                  marginTop: -15
+                                  marginTop: -15,
+                                  
                               },
                               "& .MuiInputBase-root": { height: 35 }
                           }}
-                          id="outlined-basic"
+                          id="beamendoffset_end"
                           variant="standard"
                           
                       ></TextField>

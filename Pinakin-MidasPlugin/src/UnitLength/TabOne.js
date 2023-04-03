@@ -16,14 +16,14 @@ export default function TextFieldSizes() {
       <div>
         <TextField
           label=""
-          id="standard-size-small"
+          id="T1startNodeNumber"
           defaultValue=""
           size="large"
           variant="standard"
         />
         <TextField 
           label=""
-          id="standard-size-small"
+          id="T1startNodeCoOrd"
           defaultValue=""
           size="large"
           variant="standard" />
@@ -31,14 +31,14 @@ export default function TextFieldSizes() {
       <div>
         <TextField
           label=""
-          id="standard-size-small"
+          id="T1endNodeNumber"
           defaultValue=""
           size="large"
           variant="standard"
         />
         <TextField
           label=""
-          id="standard-size-small"
+          id="T1endNodeCoOrd"
           defaultValue=""
           size="large"
           variant="standard"
@@ -47,7 +47,7 @@ export default function TextFieldSizes() {
       <div>
         <TextField
           label=""
-          id="standard-size-small"
+          id="T1totlenelem"
           defaultValue=""
           size="large"
           variant="standard"

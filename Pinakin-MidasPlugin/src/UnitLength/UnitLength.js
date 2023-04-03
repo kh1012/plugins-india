@@ -146,7 +146,7 @@ export default function AutoGrid() {
                             Number of Element
                             </Label>                      
 
-                            <TextField id="filled-hidden-label-small" sx={{m:1,height:0,width:150,size:"absolute",position:'absolute', ml:42,mt:2}}/>
+                            <TextField id="fdivmethodtxt" onChange={handleChange} value={age} sx={{m:1,height:0,width:150,size:"absolute",position:'absolute', ml:42,mt:2}}/>
                             
                             <Label id="id2" sx={{ color:"grey",  fontFamily:"serif" ,  ml:62,mt:1,font:'caption',marginTop:4,position:'absolute'}}  >
                             ea

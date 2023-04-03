@@ -31,21 +31,21 @@ export default function ColorCheckboxes(props) {
 
       <div>
         <FormLabel>Start</FormLabel>
-        <Checkbox disabled={props.isDisabledSC}{...label} color="default" />
-        <Checkbox disabled={props.isDisabledSC}{...label} color="default" />
-        <Checkbox disabled={props.isDisabledSC}{...label} color="default" />
-        <Checkbox disabled={props.isDisabledSC}{...label} color="default" />
-        <Checkbox disabled={props.isDisabledSC}{...label} color="default" />
-        <Checkbox disabled={props.isDisabledSC}{...label} color="default" />
+        <Checkbox id={"Start_FX"} disabled={props.isDisabledSC}{...label} color="default" />
+        <Checkbox id={"Start_FY"} disabled={props.isDisabledSC}{...label} color="default" />
+        <Checkbox id={"Start_FZ"} disabled={props.isDisabledSC}{...label} color="default" />
+        <Checkbox id={"Start_MX"} disabled={props.isDisabledSC}{...label} color="default" />
+        <Checkbox id={"Start_MY"} disabled={props.isDisabledSC}{...label} color="default" />
+        <Checkbox id={"Start_MZ"} disabled={props.isDisabledSC}{...label} color="default" />
       </div>
       <div>
         <FormLabel>End </FormLabel>
-        <Checkbox disabled={props.isDisabledSC}{...label} color="default" />
-        <Checkbox disabled={props.isDisabledSC}{...label} color="default" />
-        <Checkbox disabled={props.isDisabledSC}{...label} color="default" />
-        <Checkbox disabled={props.isDisabledSC}{...label} color="default" />
-        <Checkbox disabled={props.isDisabledSC}{...label} color="default" />
-        <Checkbox disabled={props.isDisabledSC}{...label} color="default" />
+        <Checkbox id={"End_FX"} disabled={props.isDisabledSC}{...label} color="default" />
+        <Checkbox id={"End_FY"} disabled={props.isDisabledSC}{...label} color="default" />
+        <Checkbox id={"End_FZ"} disabled={props.isDisabledSC}{...label} color="default" />
+        <Checkbox id={"End_MX"} disabled={props.isDisabledSC}{...label} color="default" />
+        <Checkbox id={"End_MY"} disabled={props.isDisabledSC}{...label} color="default" />
+        <Checkbox id={"End_MZ"} disabled={props.isDisabledSC}{...label} color="default" />
       </div>
     </Box>
   );
