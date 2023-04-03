@@ -23,9 +23,9 @@ export default function SelectSmall() {
                             defaultValue={10}
                           >
                             
-                            <MenuItem value={10}>m</MenuItem>
-                            <MenuItem value={20}>mm</MenuItem>
-                            <MenuItem value={30}>in</MenuItem>
+                            <MenuItem value={10}>M</MenuItem>
+                            <MenuItem value={20}>MM</MenuItem>
+                            <MenuItem value={30}>IN</MenuItem>
                           </Select>
     </FormControl>
 

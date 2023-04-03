@@ -6,6 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import ReactDOM from 'react-dom/client';
 
 import AppBar1 from './AppBar/AppBarListItems';
 import UnitLen from './UnitLength/UnitLength';
@@ -50,6 +51,137 @@ var g_End_MY;
 var g_End_MZ;
 
 
+const baseUrl = 'https://api-beta.rpm.kr-dv-midasit.com:443';
+const programType = 'civil';
+const MAPIKey = 'eyJ1ciI6InBpbmFraW4iLCJwZyI6ImNpdmlsIiwiY24iOiJVV0VRczlOYVNRIn0.036c3c66a654cc7e2f8ae66f5cd16aff187e643165ffe1bb444c787f8520bccf';
+
+
+function checkExistQuerystring() {
+  const mapiKeyQuery = getMapiKey();
+  console.log(mapiKeyQuery);
+  if (mapiKeyQuery === null) return;
+  const currentQueryStringDot = document.getElementById('current-querystring-dot');
+  currentQueryStringDot.style.backgroundColor = '#059669';
+  const currentQueryString = document.getElementById('current-querystring');
+  currentQueryString.innerHTML = `Current QueryString is ${mapiKeyQuery}`;
+  currentQueryString.style.color = '#059669';
+  currentQueryString.style.fontWeight = '700';
+  document.getElementById('querystring-wrapper').style.display = 'none';
+}
+
+function getMapiKey() {
+  // Get params from url and get mapiKey.
+  const params = new URLSearchParams(window.location.search);
+  return params.get("mapiKey");
+}
+
+// Function to create QueryString
+function makeQueryString() {
+  const inputValue = document.getElementById('querystring-input').value;
+  const  queryString  =  '?mapiKey='  +  inputValue ;
+  document.getElementById('querystring-output').textContent  =  queryString ;
+}
+
+// Function to check if MAPI-Key is correct
+async function checkMapiKey() {
+  // Get mapiKey from QueryString.
+  //const mapiKey = getMapiKey();
+
+  const response = await fetch(`${baseUrl}/mapiKey/verify`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'MAPI-Key' : MAPIKey
+    }
+  });
+
+
+  // Send the response result to the DOM object with getnode-output id.
+  // document.getElementById('status-output').textContent = 
+  //   JSON.stringify(await response.json(), null, 2);
+    console.log(JSON.stringify(await response.json(), null, 2));
+    getNodeFetch();
+
+    createUnit("KN",g_unit,"BTU","F")
+    // createNode(10,11,21,31)
+    // createNode(12,12,22,32)
+}
+
+
+
+// Function that defines the action when the GET NODE button is clicked
+async function getNodeFetch() {
+ 
+  // Send request to get NODE.
+  const response = await fetch(`${baseUrl}/${programType}/db/node`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'MAPI-Key' : MAPIKey
+  }});
+
+  // Send the response result to the DOM object with getnode-output id.
+ // document.getElementById('getnode-output').textContent = 
+ console.log(JSON.stringify(await response.json(), null, 2));
+}
+
+
+async function createNode(ID, X, Y, Z) {  
+  
+  const response = await fetch(`${baseUrl}/civil/db/node`, {
+
+    method: "POST",
+
+    headers: {
+
+      'Content-Type': 'application/json',
+
+      'MAPI-Key': MAPIKey
+
+    },
+
+    body: JSON.stringify(({
+      "Assign": {
+        [ID]: {
+          "X": X,
+          "Y": Y,
+          "Z": Z,
+        }
+      }
+    }
+    ))
+  });
+
+}
+
+async function createUnit(ID, X, Y, Z,W) {  
+  
+  const response = await fetch(`${baseUrl}/civil/db/unit`, {
+
+    method: "PUT",
+
+    headers: {
+
+      'Content-Type': 'application/json',
+
+      'MAPI-Key': MAPIKey
+
+    },
+
+    body: JSON.stringify(({
+      "Assign": {
+        "1": {
+          "FORCE": "KN",
+          "DIST": X,
+          "HEAT": "BTU",
+          "TEMPER": "F"
+        }
+      }
+    }
+    ))
+  });
+
+}
 
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
@@ -169,7 +301,7 @@ export default function FormDialog() {
       g_beamendoffset_end = document.getElementById('beamendoffset_end').value;
       console.log(g_beamendoffset_end)
     }
-
+    checkMapiKey()
   };
 
   const handleClose = () => {

@@ -6,35 +6,72 @@ import reportWebVitals from './reportWebVitals';
 
 
 
-const baseUrl = 'https://api-beta.midasit.com:443';
+const baseUrl = 'https://api-beta.rpm.kr-dv-midasit.com:443';
 const programType = 'civil';
+const MAPIKey = 'eyJ1ciI6InBpbmFraW4iLCJwZyI6ImNpdmlsIiwiY24iOiJDVi1IbzUtV1F3In0.6712bd920290c2352aad68a8ce86953bbc288f147c57464c98e537bc24a8c572'
 
+
+function checkExistQuerystring() {
+  const mapiKeyQuery = getMapiKey();
+  console.log(mapiKeyQuery);
+  if (mapiKeyQuery === null) return;
+  const currentQueryStringDot = document.getElementById('current-querystring-dot');
+  currentQueryStringDot.style.backgroundColor = '#059669';
+  const currentQueryString = document.getElementById('current-querystring');
+  currentQueryString.innerHTML = `Current QueryString is ${mapiKeyQuery}`;
+  currentQueryString.style.color = '#059669';
+  currentQueryString.style.fontWeight = '700';
+  document.getElementById('querystring-wrapper').style.display = 'none';
+}
 
 function getMapiKey() {
-  // url에서 params를 가져오고 mapiKey를 get 합니다.
+  // Get params from url and get mapiKey.
   const params = new URLSearchParams(window.location.search);
   return params.get("mapiKey");
 }
 
+// Function to create QueryString
+function makeQueryString() {
+  const inputValue = document.getElementById('querystring-input').value;
+  const  queryString  =  '?mapiKey='  +  inputValue ;
+  document.getElementById('querystring-output').textContent  =  queryString ;
+}
 
-// MAPI-Key가 올바른지 확인하는 함수
+// Function to check if MAPI-Key is correct
 async function checkMapiKey() {
-  // mapiKey를 QueryString으로부터 가져 옵니다.
+  // Get mapiKey from QueryString.
   const mapiKey = getMapiKey();
 
   const response = await fetch(`${baseUrl}/mapiKey/verify`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'MAPI-Key': mapiKey
+      'MAPI-Key' : mapiKey
     }
   });
 
-  // 응답 결과를 getnode-output id를 가진 DOM 객체에 전달합니다.
+  // Send the response result to the DOM object with getnode-output id.
   document.getElementById('status-output').textContent = 
     JSON.stringify(await response.json(), null, 2);
 }
 
+// Function that defines the action when the GET NODE button is clicked
+async function getNodeFetch() {
+  // Get mapiKey from QueryString.
+  const mapiKey = getMapiKey();
+
+  // Send request to get NODE.
+  const response = await fetch(`${baseUrl}/${programType}/db/node`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'MAPI-Key' : mapiKey
+  }});
+
+  // Send the response result to the DOM object with getnode-output id.
+  document.getElementById('getnode-output').textContent = 
+    JSON.stringify(await response.json(), null, 2);
+}
 
 
 
