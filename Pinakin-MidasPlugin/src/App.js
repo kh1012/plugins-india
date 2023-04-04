@@ -53,6 +53,8 @@ var g_End_MX;
 var g_End_MY;
 var g_End_MZ;
 
+var g_SecID=[];
+var g_MatID=[];
 var g_NodeId=[];
 
 const baseUrl = 'https://api-beta.midasit.com:443';
@@ -108,12 +110,12 @@ async function checkMapiKey() {
     getNodeFetch();
 
     createUnit("KN",g_unit,"BTU","F")
-    createMaterial(4,g_mat)
+    await createMaterial(1,g_mat)
     var [b,h]=g_sect.split("X")
     if(g_unit==="M") g_unit_multFact=0.001;
     else if(g_unit==="MM") g_unit_multFact=1.0;
     else if(g_unit==="IN") g_unit_multFact=0.393701;
-    createSection(4,g_sect,b*g_unit_multFact,h*g_unit_multFact)
+    await createSection(1,g_sect,b*g_unit_multFact,h*g_unit_multFact)
 
     if(g_divmethod==="Uniform")
     {
@@ -130,17 +132,17 @@ async function checkMapiKey() {
           var zIncrement = (parseFloat(z1) - parseFloat(z0))/parseFloat(g_numelem);
          
           if(i===0){            
-            createNode(parseInt(g_T1startNodeNumber),parseFloat(x0),parseFloat(y0),parseFloat(z0))
+            await createNode(parseInt(g_T1startNodeNumber),parseFloat(x0),parseFloat(y0),parseFloat(z0))
              a = parseFloat(x0);
              b = parseFloat(y0);
              c = parseFloat(z0);
           }
           else if(i===parseInt(g_numelem)){            
-            createNode(parseInt(g_T1endNodeNumber),parseFloat(x1),parseFloat(y1),parseFloat(z1))
+            await createNode(parseInt(g_T1endNodeNumber),parseFloat(x1),parseFloat(y1),parseFloat(z1))
           }
           else
           {
-            createNode(parseInt(i)+parseInt(g_T1startNodeNumber),(parseFloat(a)+parseFloat(xIncrement)),(parseFloat(b)+parseFloat(yIncrement)),(parseFloat(c)+parseFloat(zIncrement)))
+            await createNode(parseInt(i)+parseInt(g_T1startNodeNumber),(parseFloat(a)+parseFloat(xIncrement)),(parseFloat(b)+parseFloat(yIncrement)),(parseFloat(c)+parseFloat(zIncrement)))
             a=(parseFloat(a)+parseFloat(xIncrement));
             b=(parseFloat(b)+parseFloat(yIncrement));
             c=(parseFloat(c)+parseFloat(zIncrement));
@@ -162,14 +164,14 @@ async function checkMapiKey() {
           var zIncrement = parseFloat(lenEachElem);
          
           if(i===0){            
-            createNode(parseInt(g_T2startnodenum),parseFloat(x0),parseFloat(y0),parseFloat(z0))
+            await createNode(parseInt(g_T2startnodenum),parseFloat(x0),parseFloat(y0),parseFloat(z0))
              a = parseFloat(x0);
              b = parseFloat(y0);
              c = parseFloat(z0);
           }          
           else
           {
-            createNode(parseInt(i)+parseInt(g_T2startnodenum),(parseFloat(a)+parseFloat(xIncrement)),(parseFloat(b)+parseFloat(yIncrement)),(parseFloat(c)+parseFloat(zIncrement)))
+            await createNode(parseInt(i)+parseInt(g_T2startnodenum),(parseFloat(a)+parseFloat(xIncrement)),(parseFloat(b)+parseFloat(yIncrement)),(parseFloat(c)+parseFloat(zIncrement)))
             a=(parseFloat(a)+parseFloat(xIncrement));
             b=(parseFloat(b)+parseFloat(yIncrement));
             c=(parseFloat(c)+parseFloat(zIncrement));
@@ -196,17 +198,17 @@ async function checkMapiKey() {
           var zIncrement = (parseFloat(z1)- parseFloat(z0) > 0) ?parseFloat(g_numelem):0;
          
           if(i===0){            
-            createNode(parseInt(g_T1startNodeNumber),parseFloat(x0),parseFloat(y0),parseFloat(z0))
+            await createNode(parseInt(g_T1startNodeNumber),parseFloat(x0),parseFloat(y0),parseFloat(z0))
              a = parseFloat(x0);
              b = parseFloat(y0);
              c = parseFloat(z0);
           }
           else if(i===parseInt(g_numelem)){            
-            createNode(parseInt(g_T1endNodeNumber),parseFloat(x1),parseFloat(y1),parseFloat(z1))
+            await createNode(parseInt(g_T1endNodeNumber),parseFloat(x1),parseFloat(y1),parseFloat(z1))
           }
           else
           {
-            createNode(parseInt(i)+parseInt(g_T1startNodeNumber),(parseFloat(a)+parseFloat(xIncrement)),(parseFloat(b)+parseFloat(yIncrement)),(parseFloat(c)+parseFloat(zIncrement)))
+            await createNode(parseInt(i)+parseInt(g_T1startNodeNumber),(parseFloat(a)+parseFloat(xIncrement)),(parseFloat(b)+parseFloat(yIncrement)),(parseFloat(c)+parseFloat(zIncrement)))
             a=(parseFloat(a)+parseFloat(xIncrement));
             b=(parseFloat(b)+parseFloat(yIncrement));
             c=(parseFloat(c)+parseFloat(zIncrement));
@@ -229,14 +231,14 @@ async function checkMapiKey() {
           var zIncrement = parseFloat(lenEachElem);
          
           if(i===0){            
-            createNode(parseInt(g_T2startnodenum),parseFloat(x0),parseFloat(y0),parseFloat(z0))
+            await createNode(parseInt(g_T2startnodenum),parseFloat(x0),parseFloat(y0),parseFloat(z0))
              a = parseFloat(x0);
              b = parseFloat(y0);
              c = parseFloat(z0);
           }          
           else
           {
-            createNode(parseInt(i)+parseInt(g_T2startnodenum),(parseFloat(a)+parseFloat(xIncrement)),(parseFloat(b)+parseFloat(yIncrement)),(parseFloat(c)+parseFloat(zIncrement)))
+            await createNode(parseInt(i)+parseInt(g_T2startnodenum),(parseFloat(a)+parseFloat(xIncrement)),(parseFloat(b)+parseFloat(yIncrement)),(parseFloat(c)+parseFloat(zIncrement)))
             a=(parseFloat(a)+parseFloat(xIncrement));
             b=(parseFloat(b)+parseFloat(yIncrement));
             c=(parseFloat(c)+parseFloat(zIncrement));
@@ -254,9 +256,11 @@ async function checkMapiKey() {
     do{
       let val = g_NodeId[i];
       let val1 = g_NodeId[i-1];
+      createElement(i,parseInt(g_MatID[0]),parseInt(g_SecID[0]),parseInt(val),parseInt(val1))
+      i=++i;
     } while(i<arrayLen)
 
-    createElement(1,1,4,100,101)
+    // createElement(1,1,4,100,101)
 }
 
 
@@ -303,7 +307,7 @@ async function createNode(ID, X, Y, Z) {
     }
     ))
   });
-  g_NodeId.push([ID]);
+  g_NodeId.push(ID);
 }
 
 async function createMaterial(ID,Name) {  
@@ -347,7 +351,7 @@ async function createMaterial(ID,Name) {
     }
     ))
   });
-
+g_MatID.push(ID);
 }
 
 
@@ -440,10 +444,8 @@ async function createSection(ID,Name,sizeB,sizeH) {
                 0.0,
                 0.0,
                 0.0
-            ]           
-            
-            
-            }    
+            ]         
+          }    
 
           }
         }        
@@ -451,7 +453,7 @@ async function createSection(ID,Name,sizeB,sizeH) {
     }
     ))
   });
-
+  g_SecID.push(ID);
 }
 
 async function createUnit(ID, X, Y, Z,W) {  
