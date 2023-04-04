@@ -4,24 +4,36 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { isEmpty } from 'lodash';
+import Box from '@mui/material/Box';
+
 const get = async () => {
   const res = await fetch('https://api-beta.midasit.com:443/civil/db/matl', {
     headers: {
       "Content-Type": "application/json",
-      // "MAPI-Key": "eyJ1ciI6InBpbmFraW4iLCJwZyI6ImNpdmlsIiwiY24iOiJ0NU8wXzJCT1NBIn0.21ef19dcf29f455cd6184f69b16d679f2ed70c78aeb6fdf1597e78344b65ed46"
+      // "MAPI-Key": "eyJ1ciI6ImxoeTAxMTgiLCJwZyI6ImNpdmlsIiwiY24iOiIwak9lUTJnYlJRIn0.d54292d340fc5e847d1f8220c3d316d8738c29ebc40ca5901f539ad6be44c66c"
       "MAPI-Key": window.MAPIKey
     }
   })
-
-  const data = (await res.json())["MATL"];
-  return data;
+  if(res.ok){
+    const data = (await res.json())["MATL"];
+    return data;
+  }
+  else{
+    return "";
+  }
 }
 
+const defaultMatl = [
+  {"M20": 10},
+  {"M30": 20},
+  {"M40": 30},
+]
+
 export default function SelectSmall() {
-  const [age, setAge] = React.useState('');
+  const [matl, setMatl] = React.useState('');
 
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setMatl(event.target.value);
   };
 
   //react State (useState)
@@ -32,11 +44,20 @@ export default function SelectSmall() {
     const initAsync = async () => {
       const matlData = await get();
       const temp = [];
-      for ( const key of Object.keys(matlData) ) {
-        temp.push([key, matlData[key]])
+      if(matlData === "") {
+        setMatlList(defaultMatl);
       }
-      console.log(temp);
-      setMatlList(temp);
+      else {
+        let keys = Object.keys(matlData);
+        for ( let idx = 0; idx < keys.length; idx++ ) {
+          const matlId = keys[idx];
+          const TempObj = {};
+          TempObj[matlId] = matlData[matlId];
+          temp.push(TempObj)
+        }
+        console.log(temp);
+        setMatlList(temp);
+      }
     }
 
     //Async, Sync
@@ -44,35 +65,22 @@ export default function SelectSmall() {
   }, []);
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 120 }} size="small" >
-      {/* <InputLabel id="demo-select-small">Age</InputLabel> */}
-      <Select sx={{minWidth: 120,ml:60,position:'absolute',mt:-4}} 
-                            labelId="demo-select-small"
-                            id="material"
-                            // value={age}
-                            // label="Age"
-                            onChange={handleChange}
-                            defaultValue={matlList.length !== 0 ? parseInt(matlList[0][0]) : "M20"}
-                            onClick={get}
-                          >
-                            {/* role of map() in javascript & {} is enable to variable string*/}
-                            {matlList.map((pairValue, idx) => {
-                              const matlId = pairValue[0];
-                              const matlName = pairValue[1].NAME;
-                              return <MenuItem key={idx} value={parseInt(matlId)}>{matlName}</MenuItem>
-                            })}
-                            {isEmpty(matlList) &&
-                              <>
-                                <MenuItem value={10}>M20</MenuItem>
-                                <MenuItem value={20}>M30</MenuItem>
-                                <MenuItem value={30}>M40</MenuItem>
-                              </>
-                            }
-                          </Select>
-    </FormControl>
-
-
-
-
+    <Box sx={{ minWidth: 120, ml:1}}>
+      <FormControl fullWidth>
+        <Select sx={{minWidth: 120, height:40, ml:60, position:'absolute', mt:-3}} 
+          labelId="select-matl"
+          id="material"
+          value={matl}
+          onChange={handleChange}
+          color="primary"
+        >
+          {matlList.map((value, idx) => {
+            const matlId = Object.keys(value)[0];
+            const matlInfo = value[matlId];
+            return <MenuItem key={idx} value={matlInfo}>{matlId}</MenuItem>
+          })}
+        </Select>
+      </FormControl>
+    </Box>
   );
 }
