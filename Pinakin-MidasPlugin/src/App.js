@@ -17,12 +17,14 @@ var  g_mat;
 var  g_sect;
 var  g_divmethod;
 var g_numelem;
+var g_tabidT1;
 var g_T1startNodeNumber;
 var g_T1startNodeCoOrd;
 var g_T1endNodeNumber;
 var g_T1endNodeCoOrd;
 var g_T1totlenelem;
 
+var g_tabidT2;
 var g_T2startnodenum;
 var g_T2endnodenum;
 var g_T2totlenelem;
@@ -52,10 +54,11 @@ var g_End_MY;
 var g_End_MZ;
 
 
-const baseUrl = 'https://api-beta.rpm.kr-dv-midasit.com:443';
+const baseUrl = 'https://api-beta.midasit.com:443';
 const programType = 'civil';
-const MAPIKey = 'eyJ1ciI6InBpbmFraW4iLCJwZyI6ImNpdmlsIiwiY24iOiJ0Ui0yQURVS1NRIn0.3e16b45da4faed378a0decd63046f48ec8fdf18fd45c1174fbec81a30e775723';
-
+const MAPIKey = 'eyJ1ciI6InBpbmFraW4iLCJwZyI6ImNpdmlsIiwiY24iOiIxUjEydW9EUVFRIn0.8c9c37b8c361f0b53f83624b5a3d1e36591614a42062fe5d1779158b145e02d1';
+window.MAPIKey = MAPIKey;
+window.baseUrl = baseUrl;
 
 function checkExistQuerystring() {
   const mapiKeyQuery = getMapiKey();
@@ -104,12 +107,48 @@ async function checkMapiKey() {
     getNodeFetch();
 
     createUnit("KN",g_unit,"BTU","F")
-    createMaterial(3,g_mat)
+    createMaterial(4,g_mat)
     var [b,h]=g_sect.split("X")
     if(g_unit==="M") g_unit_multFact=0.001;
     else if(g_unit==="MM") g_unit_multFact=1.0;
     else if(g_unit==="IN") g_unit_multFact=0.393701;
     createSection(4,g_sect,b*g_unit_multFact,h*g_unit_multFact)
+
+    if(g_divmethod==="Uniform")
+    {
+      if(g_tabidT1===0)
+      {
+        var lenEachElem = parseFloat(g_T1totlenelem)/parseFloat(g_numelem);
+        for (let i = 0; i <= g_numelem; i++) {
+          var [x0,y0,z0]=g_T1startNodeCoOrd.split(",")
+          var [x1,y1,z1]=g_T1endNodeCoOrd.split(",")
+          var xIncrement = (parseFloat(x1) - parseFloat(x0))/parseFloat(g_numelem);
+          var yIncrement = (parseFloat(y1) - parseFloat(y0))/parseFloat(g_numelem);
+          var zIncrement = (parseFloat(z1) - parseFloat(z0))/parseFloat(g_numelem);
+          if(i===0){            
+            createNode(parseInt(g_T1startNodeNumber),parseFloat(x0),parseFloat(y0),parseFloat(z0))
+          }
+          else if(i===parseInt(g_numelem)){            
+            createNode(parseInt(g_T1endNodeNumber),parseFloat(x1),parseFloat(y1),parseFloat(z1))
+          }
+          else
+          {
+            createNode(parseInt(i)+parseInt(g_T1startNodeNumber),(parseFloat(x0)+parseFloat(xIncrement)),(parseFloat(y0)+parseFloat(yIncrement)),(parseFloat(z0)+parseFloat(zIncrement)))
+            x0=(parseFloat(x0)+parseFloat(xIncrement));
+            y0=(parseFloat(y0)+parseFloat(yIncrement));
+            z0=(parseFloat(z0)+parseFloat(zIncrement));
+          }
+          
+        }
+
+      }
+       
+    }
+    else
+    {
+
+
+    }
     // createNode(10,11,21,31)
     // createNode(12,12,22,32)
 }
@@ -317,13 +356,13 @@ export default function FormDialog() {
     g_numelem=document.getElementById('fdivmethodtxt').value;
     console.log(g_numelem);
 
-    const tabidT1 = document.getElementById('simple-tab-0').tabIndex;
-    console.log(tabidT1)
+    g_tabidT1 = document.getElementById('simple-tab-0').tabIndex;
+    console.log(g_tabidT1)
 
-    const tabidT2 = document.getElementById('simple-tab-1').tabIndex;
-    console.log(tabidT2)
+    g_tabidT2 = document.getElementById('simple-tab-1').tabIndex;
+    console.log(g_tabidT2)
   
-    if(tabidT1===0)
+    if(g_tabidT1===0)
     {
       g_T1startNodeNumber=document.getElementById('T1startNodeNumber').value;
       console.log(g_T1startNodeNumber)
@@ -342,7 +381,7 @@ export default function FormDialog() {
     }
  
 
-    if(tabidT2===0)
+    if(g_tabidT2===0)
     {
           g_T2startnodenum=document.getElementById('T2startnodenum').value;
     console.log(g_T2startnodenum)

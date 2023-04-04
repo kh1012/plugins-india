@@ -3,12 +3,13 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
+import { isEmpty } from 'lodash';
 const get = async () => {
   const res = await fetch('https://api-beta.midasit.com:443/civil/db/matl', {
     headers: {
       "Content-Type": "application/json",
-      "MAPI-Key": "eyJ1ciI6Imx1Y2lvbGE3IiwicGciOiJjaXZpbCIsImNuIjoiMkFHMVRUcGZUdyJ9.5eb76ff06a76b5bf3159d133201894bf7f4e7d6373ca0346622705f48d7a9b99"
+      // "MAPI-Key": "eyJ1ciI6InBpbmFraW4iLCJwZyI6ImNpdmlsIiwiY24iOiJ0NU8wXzJCT1NBIn0.21ef19dcf29f455cd6184f69b16d679f2ed70c78aeb6fdf1597e78344b65ed46"
+      "MAPI-Key": window.MAPIKey
     }
   })
 
@@ -34,6 +35,7 @@ export default function SelectSmall() {
       for ( const key of Object.keys(matlData) ) {
         temp.push([key, matlData[key]])
       }
+      console.log(temp);
       setMatlList(temp);
     }
 
@@ -50,7 +52,7 @@ export default function SelectSmall() {
                             // value={age}
                             // label="Age"
                             onChange={handleChange}
-                            defaultValue={matlList.length !== 0 ? parseInt(matlList[0][0]) : 1}
+                            defaultValue={matlList.length !== 0 ? parseInt(matlList[0][0]) : "M20"}
                             onClick={get}
                           >
                             {/* role of map() in javascript & {} is enable to variable string*/}
@@ -59,9 +61,13 @@ export default function SelectSmall() {
                               const matlName = pairValue[1].NAME;
                               return <MenuItem key={idx} value={parseInt(matlId)}>{matlName}</MenuItem>
                             })}
-                            {/* <MenuItem value={10}>M20</MenuItem>
-                            <MenuItem value={20}>M30</MenuItem>
-                            <MenuItem value={30}>M40</MenuItem> */}
+                            {isEmpty(matlList) &&
+                              <>
+                                <MenuItem value={10}>M20</MenuItem>
+                                <MenuItem value={20}>M30</MenuItem>
+                                <MenuItem value={30}>M40</MenuItem>
+                              </>
+                            }
                           </Select>
     </FormControl>
 
