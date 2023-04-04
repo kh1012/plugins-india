@@ -53,6 +53,7 @@ var g_End_MX;
 var g_End_MY;
 var g_End_MZ;
 
+var g_NodeId=[];
 
 const baseUrl = 'https://api-beta.midasit.com:443';
 const programType = 'civil';
@@ -245,8 +246,17 @@ async function checkMapiKey() {
 
       }
     }
+
     // createNode(10,11,21,31)
     // createNode(12,12,22,32)
+    let i=1;
+    let arrayLen = g_NodeId.length;
+    do{
+      let val = g_NodeId[i];
+      let val1 = g_NodeId[i-1];
+    } while(i<arrayLen)
+
+    createElement(1,1,4,100,101)
 }
 
 
@@ -293,7 +303,7 @@ async function createNode(ID, X, Y, Z) {
     }
     ))
   });
-
+  g_NodeId.push([ID]);
 }
 
 async function createMaterial(ID,Name) {  
@@ -340,6 +350,49 @@ async function createMaterial(ID,Name) {
 
 }
 
+
+async function createElement(ID,intMATL,intSECT,intstrtNode,intendNode) {  
+  
+  const response = await fetch(`${baseUrl}/civil/db/elem`, {
+
+    method: "POST",
+
+    headers: {
+
+      'Content-Type': 'application/json',
+
+      'MAPI-Key': MAPIKey
+
+    },
+
+    body: JSON.stringify(({
+      "Assign": {
+        [ID]: {
+          "TYPE": "BEAM",
+            "MATL": intMATL,
+            "SECT": intSECT,
+          
+          "NODE": [
+            
+            intstrtNode,
+            intendNode,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            
+        ],
+        "ANGLE": 0,
+        "STYPE": 0
+        }
+      }
+    }
+    ))
+  });
+
+}
 
 async function createSection(ID,Name,sizeB,sizeH) {  
   
