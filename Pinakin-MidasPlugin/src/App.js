@@ -12,6 +12,7 @@ import AppBar1 from './AppBar/AppBarListItems';
 import UnitLen from './UnitLength/UnitLength';
 
 var  g_unit;
+var g_unit_multFact;
 var  g_mat;
 var  g_sect;
 var  g_divmethod;
@@ -53,7 +54,7 @@ var g_End_MZ;
 
 const baseUrl = 'https://api-beta.rpm.kr-dv-midasit.com:443';
 const programType = 'civil';
-const MAPIKey = 'eyJ1ciI6InBpbmFraW4iLCJwZyI6ImNpdmlsIiwiY24iOiJVV0VRczlOYVNRIn0.036c3c66a654cc7e2f8ae66f5cd16aff187e643165ffe1bb444c787f8520bccf';
+const MAPIKey = 'eyJ1ciI6InBpbmFraW4iLCJwZyI6ImNpdmlsIiwiY24iOiJ0Ui0yQURVS1NRIn0.3e16b45da4faed378a0decd63046f48ec8fdf18fd45c1174fbec81a30e775723';
 
 
 function checkExistQuerystring() {
@@ -103,6 +104,12 @@ async function checkMapiKey() {
     getNodeFetch();
 
     createUnit("KN",g_unit,"BTU","F")
+    createMaterial(3,g_mat)
+    var [b,h]=g_sect.split("X")
+    if(g_unit==="M") g_unit_multFact=0.001;
+    else if(g_unit==="MM") g_unit_multFact=1.0;
+    else if(g_unit==="IN") g_unit_multFact=0.393701;
+    createSection(4,g_sect,b*g_unit_multFact,h*g_unit_multFact)
     // createNode(10,11,21,31)
     // createNode(12,12,22,32)
 }
@@ -154,6 +161,111 @@ async function createNode(ID, X, Y, Z) {
 
 }
 
+async function createMaterial(ID,Name) {  
+  
+  const response = await fetch(`${baseUrl}/civil/db/matl`, {
+
+    method: "POST",
+
+    headers: {
+
+      'Content-Type': 'application/json',
+
+      'MAPI-Key': MAPIKey
+
+    },
+
+    body: JSON.stringify(({
+      "Assign": {
+        [ID]: {
+          "TYPE": "CONC",
+          "NAME": Name,
+          "HE_SPEC": 0,
+          "HE_COND": 0,
+          "THMAL_UNIT": "C",
+          "PLMT": 0,
+          "P_NAME": "",
+          "bMASS_DENS": false,
+          "DAMP_RAT": 0.05,
+          "PARAM": [
+            {
+                "P_TYPE": 1,
+                "STANDARD": "IS(RC)",
+                "CODE": "",
+                "DB": Name,
+                "bELAST": false,
+                "ELAST": 22360000
+            }
+        ]
+        }
+      }
+    }
+    ))
+  });
+
+}
+
+
+async function createSection(ID,Name,sizeB,sizeH) {  
+  
+  //sizeB=parseFloat(sizeB)*g_unit_multFact
+  console.log(sizeB)
+  //sizeH=parseFloat(sizeH)*g_unit_multFact
+  const response = await fetch(`${baseUrl}/civil/db/sect`, {
+
+    method: "POST",
+
+    headers: {
+
+      'Content-Type': 'application/json',
+
+      'MAPI-Key': MAPIKey
+
+    },
+
+    body: JSON.stringify(({
+      "Assign": {
+        [ID]: {
+          "SECTTYPE": "DBUSER",
+          "SECT_NAME": Name,
+          "SECT_BEFORE": {
+            "OFFSET_PT": "CC",
+            "OFFSET_CENTER": 0,
+            "USER_OFFSET_REF": 0,
+            "HORZ_OFFSET_OPT": 0,
+            "USERDEF_OFFSET_YI": 0,
+            "VERT_OFFSET_OPT": 0,
+            "USERDEF_OFFSET_ZI": 0,
+            "USE_SHEAR_DEFORM": true,
+            "USE_WARPING_EFFECT": false,
+            "SHAPE": "SB",
+            "DATATYPE": 2,
+            "SECT_I": {
+              "vSIZE": [
+                sizeB,
+                sizeH,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]           
+            
+            
+            }    
+
+          }
+        }        
+      }
+    }
+    ))
+  });
+
+}
+
 async function createUnit(ID, X, Y, Z,W) {  
   
   const response = await fetch(`${baseUrl}/civil/db/unit`, {
@@ -180,6 +292,7 @@ async function createUnit(ID, X, Y, Z,W) {
     }
     ))
   });
+
 
 }
 
