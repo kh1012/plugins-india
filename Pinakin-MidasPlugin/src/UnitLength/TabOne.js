@@ -24,7 +24,7 @@ export default function TextFieldSizes() {
         <TextField 
           label=""
           id="T1startNodeCoOrd"
-          defaultValue=""
+          defaultValue="0,0,0"
           size="large"
           variant="standard" />
       </div>
@@ -39,7 +39,7 @@ export default function TextFieldSizes() {
         <TextField
           label=""
           id="T1endNodeCoOrd"
-          defaultValue=""
+          defaultValue="0,0,0"
           size="large"
           variant="standard"
         />
