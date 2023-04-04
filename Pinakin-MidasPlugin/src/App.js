@@ -45,6 +45,8 @@ var g_Start_FZ;
 var g_Start_MX;
 var g_Start_MY;
 var g_Start_MZ;
+var g_startsupport="";
+var g_endsupport="";
 
 var g_End_FX;
 var g_End_FY;
@@ -56,6 +58,7 @@ var g_End_MZ;
 var g_SecID=[];
 var g_MatID=[];
 var g_NodeId=[];
+var g_ElemId=[];
 
 const baseUrl = 'https://api-beta.midasit.com:443';
 const programType = 'civil';
@@ -107,9 +110,9 @@ async function checkMapiKey() {
   // document.getElementById('status-output').textContent = 
   //   JSON.stringify(await response.json(), null, 2);
     console.log(JSON.stringify(await response.json(), null, 2));
-    getNodeFetch();
+    await getNodeFetch();
 
-    createUnit("KN",g_unit,"BTU","F")
+    await createUnit("KN",g_unit,"BTU","F")
     await createMaterial(1,g_mat)
     var [b,h]=g_sect.split("X")
     if(g_unit==="M") g_unit_multFact=0.001;
@@ -256,11 +259,51 @@ async function checkMapiKey() {
     do{
       let val = g_NodeId[i];
       let val1 = g_NodeId[i-1];
-      createElement(i,parseInt(g_MatID[0]),parseInt(g_SecID[0]),parseInt(val),parseInt(val1))
+      await createElement(i,parseInt(g_MatID[0]),parseInt(g_SecID[0]),parseInt(val),parseInt(val1))
       i=++i;
     } while(i<arrayLen)
 
     // createElement(1,1,4,100,101)
+
+
+    /////////// PART 2 ////////////////////
+    if(g_chk_a){
+    await createGroup(1,g_strgrp,g_NodeId ,g_ElemId);}
+    
+    if(g_chk_b){
+      i=0;
+      do{
+        await createNodeLoacalAxis(g_NodeId[i]);
+        i=++i;
+      } while(i<arrayLen)
+    }
+
+    if(g_chk_c){
+      let j=0;
+      let arrayLenElem = g_ElemId.length;
+      do{       
+        await createNotionalSize(j+1,parseInt(g_notionalsize));
+        j=++j;
+      } while(j<arrayLenElem)
+      
+    }
+
+
+    if(g_chk_d){      
+      decidestartsupport();
+      decideendsupport();
+      await createSupport(g_NodeId[0],g_startsupport);
+      await createSupport(g_NodeId[arrayLen-1],g_endsupport);
+    }
+
+    if(g_chk_e){
+
+      AddoffsettoBeam(g_ElemId[4]);
+      AddoffsettoBeam(g_ElemId[7]);
+    }
+
+    document.getElementById('fltDlg').innerText = "Process Finished";
+    
 }
 
 
@@ -279,6 +322,146 @@ async function getNodeFetch() {
   // Send the response result to the DOM object with getnode-output id.
  // document.getElementById('getnode-output').textContent = 
  console.log(JSON.stringify(await response.json(), null, 2));
+}
+//Offset
+async function AddoffsettoBeam(id) {
+  const response = await fetch(`${baseUrl}/${programType}/db/offs`, {
+    method: "PUT",
+    headers: {
+      'Content-Type': 'application/json',
+      'MAPI-Key': MAPIKey
+    },
+    body: JSON.stringify(({
+      "Assign": {
+        [id]: {
+            "ITEMS": [
+                {
+                    "ID": 1,
+                    "GROUP_NAME": "",
+                    "TYPE": "ELEMENT",
+                    "RGDYi": parseFloat(g_beamendoffset_start),
+                    "RGDZi":  parseFloat(g_beamendoffset_start),
+                    "RGDYj":  parseFloat(g_beamendoffset_end),
+                    "RGDZj": parseFloat(g_beamendoffset_end),
+                }
+            ]
+        }
+    }
+    }
+
+    ))
+
+  });
+
+  console.log(JSON.stringify(await response.json(), null, 2));
+}
+
+//Support
+async function createSupport(startsupportid,startsupport) {
+  const response = await fetch(`${baseUrl}/${programType}/db/cons`, {
+    method: "PUT",
+    headers: {
+      'Content-Type': 'application/json',
+      'MAPI-Key': MAPIKey
+    },
+    body: JSON.stringify(({
+      "Assign": {
+        [startsupportid]: {
+            "ITEMS": [
+                {
+                    "ID": 1,
+                    "CONSTRAINT": startsupport
+                }
+            ]
+        }
+    }
+    }
+
+    ))
+
+  });
+
+  console.log( JSON.stringify(await response.json(), null, 2));
+}
+
+
+//Notional Size
+async function createNotionalSize(id,val) {
+  const response = await fetch(`${baseUrl}/${programType}/db/edmp`, {
+    method: "PUT",
+    headers: {
+      'Content-Type': 'application/json',
+      'MAPI-Key': MAPIKey
+    },
+    body: JSON.stringify(({
+      "Assign": {
+        [id]: 
+          {
+            "TYPE": "NSM",
+            "H_VS": val,
+          }      
+      }
+    }
+    ))
+  });
+  console.log(JSON.stringify(await response.json(), null, 2));
+}
+
+//Node Local Axis
+async function createNodeLoacalAxis(id) {
+  const response = await fetch(`${baseUrl}/${programType}/db/skew`, {
+    method: "PUT",
+    headers: {
+      'Content-Type': 'application/json',
+      'MAPI-Key': MAPIKey
+    },
+    body: JSON.stringify(({
+      "Assign": {
+        [id]: 
+          {
+            "iMETHOD": 1,
+            "ANGLE_X": 43.0,
+            "ANGLE_Y": 44.0,
+            "ANGLE_Z": 45.0
+          }
+        
+
+      }
+    }
+
+    ))
+
+  });
+
+  console.log(JSON.stringify(await response.json(), null, 2));
+}
+
+async function createGroup(ID,GpName,NList,EList) {
+  const response = await fetch(`${baseUrl}/${programType}/db/grup`, {
+    method: "PUT",
+    headers: {
+      'Content-Type': 'application/json',
+      'MAPI-Key': MAPIKey
+    },
+    body: JSON.stringify(({
+      "Assign": {
+        [ID]: {
+          "NAME": GpName,
+          "P_TYPE": 0,
+          "N_LIST": NList ,
+          "E_LIST":EList
+          // "N_LIST": [100,101,102,103,104,105,106,107,108,109,110],
+          // "E_LIST":[1,2,3,4,5,6,7,8,9,10]
+        }
+
+      }
+    }
+
+    ))
+
+  });
+
+  console.log( JSON.stringify(await response.json(), null, 2));
 }
 
 
@@ -395,7 +578,7 @@ async function createElement(ID,intMATL,intSECT,intstrtNode,intendNode) {
     }
     ))
   });
-
+  g_ElemId.push(ID);
 }
 
 async function createSection(ID,Name,sizeB,sizeH) {  
@@ -620,20 +803,12 @@ export default function FormDialog() {
       Create Structure Line
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>M-API Key</DialogTitle>
+        <DialogTitle>Creating Model in Midas Civil</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-           Please Enter M-API Key to Process Further
+          <DialogContentText id="fltDlg">
+           Processing
           </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="M-API Key"
-            type="key"
-            fullWidth
-            variant="standard"
-          />
+          
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
@@ -644,6 +819,97 @@ export default function FormDialog() {
   );
 }
 
+
+function decidestartsupport() {
+
+  if (g_Start_FX) {
+    g_startsupport = g_startsupport + "1";
+  }
+  else {
+    g_startsupport = g_startsupport + "0";
+  }
+
+  if (g_Start_FY) {
+    g_startsupport = g_startsupport + "1";
+  }
+  else {
+    g_startsupport = g_startsupport + "0";
+  }
+  if (g_Start_FZ) {
+    g_startsupport = g_startsupport + "1";
+  }
+  else {
+    g_startsupport = g_startsupport + "0";
+  }
+
+  if (g_Start_MX) {
+    g_startsupport = g_startsupport + "1";
+  }
+  else {
+    g_startsupport = g_startsupport + "0";
+  }
+
+  if (g_Start_MY) {
+    g_startsupport = g_startsupport + "1";
+  }
+  else {
+    g_startsupport = g_startsupport + "0";
+  }
+
+  if (g_Start_MZ) {
+    g_startsupport = g_startsupport + "1";
+  }
+  else {
+    g_startsupport = g_startsupport + "0";
+  }
+  g_startsupport = g_startsupport + "0";
+}
+
+
+function decideendsupport() {
+
+  if (g_End_FX) {
+    g_endsupport = g_endsupport + "1";
+  }
+  else {
+    g_endsupport = g_endsupport + "0";
+  }
+
+  if (g_End_FY) {
+    g_endsupport = g_endsupport + "1";
+  }
+  else {
+    g_endsupport = g_endsupport + "0";
+  }
+  if (g_End_FZ) {
+    g_endsupport = g_endsupport + "1";
+  }
+  else {
+    g_endsupport = g_endsupport + "0";
+  }
+
+  if (g_End_MX) {
+    g_endsupport = g_endsupport + "1";
+  }
+  else {
+    g_endsupport = g_endsupport + "0";
+  }
+
+  if (g_End_MY) {
+    g_endsupport = g_endsupport + "1";
+  }
+  else {
+    g_endsupport = g_endsupport + "0";
+  }
+
+  if (g_End_MZ) {
+    g_endsupport = g_endsupport + "1";
+  }
+  else {
+    g_endsupport = g_endsupport + "0";
+  }
+  g_endsupport = g_endsupport + "0";
+}
 
 // import logo from './logo.svg';
 // import Button from '@mui/material/Button';
