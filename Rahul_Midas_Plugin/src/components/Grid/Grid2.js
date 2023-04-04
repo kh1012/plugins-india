@@ -9,7 +9,8 @@ import SectionDropDown from './thirdselectedcomponent'
 import Divmethod from './fourthselectedcomponent'
 import Label from '@mui/material/FormLabel'
 import Divider from '@mui/material/Divider'
-import CustomTabs from './CustomTabs'
+//import CustomTabs from './CustomTabs'
+import CustomTabs from './Ctabs'
 import Textfield from "@mui/material/TextField"
 import Checkboxitems from "./Checkboxitems"
 import SelectVariants from './firstselectedcomponent';

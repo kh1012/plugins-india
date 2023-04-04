@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 const baseUrl = "https://api-beta.midasit.com:443";
 const programType = 'civil';
 var mapiKey = "eyJ1ciI6IlJhaHVsTWlkYXM5NiIsInBnIjoiY2l2aWwiLCJjbiI6IlNUZVZDaW9SU0EifQ.d6366aff78ba1d787063b082a014569396454e67e5a01a6d4a4ce3dddc12b405"
+window.mapikey=mapiKey;
 var Units;
 var Material;
 var Section;
@@ -54,7 +55,7 @@ function getids(){
   Section=document.getElementById("Section").innerText;
   DivMethod=document.getElementById("Section").innerText;
   Number_Length_ofelement=document.getElementById("Number_Of_Elements").value;
-  tabid1=document.getElementById("full-width-tab-0").tabIndex;
+  tabid1=document.getElementById("simple-tab-0").tabIndex;
 
   if(tabid1===0)
   {
@@ -119,7 +120,7 @@ function StartApplication() {
   var [b, h] = Section.split("x");
   createSection("1", "Beam", parseInt(b), parseInt(h));
   // createNode(1,5,0,0);
-  createGroup(1, "Column", [1,2,3],[1,2]);
+  createGroup(1, Text_StructuralGp, [1,2,3],[1,2]);
   startsupport=""
   endsupport=""
   decidestartsupport();
@@ -127,6 +128,8 @@ function StartApplication() {
   createSupport(2,startsupport);
   createSupport(3,endsupport);
   createNodeLoacalAxis("1");
+  createNotionalSize("1","0.095");
+  AddoffsettoBeam("1",0,Text_StructuralGp);
 }
 
 function decidestartsupport() {
@@ -480,6 +483,67 @@ async function createNodeLoacalAxis(id) {
 
   console.log(JSON.stringify(await response.json(), null, 2));
 }
+
+//Node Local Axis
+async function createNotionalSize(id,val) {
+  const response = await fetch(`${baseUrl}/${programType}/db/edmp`, {
+    method: "post",
+    headers: {
+      'Content-Type': 'application/json',
+      'MAPI-Key': mapiKey
+    },
+    body: JSON.stringify(({
+      "Assign": {
+        [id]: 
+          {
+            "TYPE": "NSM",
+            "H_VS": val,
+          }
+        
+
+      }
+    }
+
+    ))
+
+  });
+
+  console.log(JSON.stringify(await response.json(), null, 2));
+}
+
+async function AddoffsettoBeam(id,val,gpname) {
+  const response = await fetch(`${baseUrl}/${programType}/db/offs`, {
+    method: "PUT",
+    headers: {
+      'Content-Type': 'application/json',
+      'MAPI-Key': mapiKey
+    },
+    body: JSON.stringify(({
+      "Assign": {
+        [id]: {
+            "ITEMS": [
+                {
+                    "ID": 1,
+                    "GROUP_NAME": "",
+                    "TYPE": "ELEMENT",
+                    "RGDYi": parseFloat(StartOffset),
+                    "RGDZi":  parseFloat(StartOffset),
+                    "RGDYj":  parseFloat(EndOffset),
+                    "RGDZj": parseFloat(EndOffset),
+                }
+            ]
+        }
+    }
+    }
+
+    ))
+
+  });
+
+  console.log(JSON.stringify(await response.json(), null, 2));
+}
+
+
 
 function App() {
   return (
