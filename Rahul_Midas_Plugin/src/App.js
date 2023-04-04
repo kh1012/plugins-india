@@ -1,5 +1,5 @@
 import { ButtonGroup } from '@mui/material';
-import React from 'react';
+import React, { createElement } from 'react';
 import ReactDOM from 'react-dom/client';
 import Appbar from './components/AppBar/appbar';
 import Grid from './components/Grid/Grid2';
@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 
 const baseUrl = "https://api-beta.midasit.com:443";
 const programType = 'civil';
-var mapiKey = "eyJ1ciI6IlJhaHVsTWlkYXM5NiIsInBnIjoiY2l2aWwiLCJjbiI6IlNUZVZDaW9SU0EifQ.d6366aff78ba1d787063b082a014569396454e67e5a01a6d4a4ce3dddc12b405"
+var mapiKey = "eyJ1ciI6IlJhaHVsTWlkYXM5NiIsInBnIjoiY2l2aWwiLCJjbiI6IlZpeDAwUzJqUVEifQ.1f7159e0697a63eb82338ad36ff63fcbcf5f43a98cfbe69187b61214753d10da"
 window.mapikey=mapiKey;
 var Units;
 var Material;
@@ -34,26 +34,29 @@ var CB_RestraintsSupports;
 var CB_BeamEndOffset;
 var startsupport ="";
 var endsupport ="";
-var SFX
-var SFY
-var SFZ
-var SMX
-var SMY
-var SMZ
-var EFX
-var EFY
-var EFZ
-var EMX
-var EMY
-var EMZ
-var StartOffset
-var EndOffset
-var g_unit_multFact
+var SFX;
+var SFY;
+var SFZ;
+var SMX;
+var SMY;
+var SMZ;
+var EFX;
+var EFY;
+var EFZ;
+var EMX;
+var EMY;
+var EMZ;
+var StartOffset;
+var EndOffset;
+var g_unit_multFact;
+var g_SecID=[];
+var g_MatID=[];
+var g_NodeId=[];
 function getids(){
   Units=document.getElementById("Units").innerText;
   Material=document.getElementById("Material").innerText;
   Section=document.getElementById("Section").innerText;
-  DivMethod=document.getElementById("Section").innerText;
+  DivMethod=document.getElementById("DivMethod").innerText;
   Number_Length_ofelement=document.getElementById("Number_Of_Elements").value;
   tabid1=document.getElementById("simple-tab-0").tabIndex;
 
@@ -112,24 +115,215 @@ function getids(){
 }
 
 
-function StartApplication() {
+async function StartApplication() {
+  g_NodeId=[];
+  g_SecID=[];
+  g_MatID=[];
   getids();
   checkMapiKey();
-  createUnit("KN", "MM", "BTU", "F")
+  createUnit("KN", Units, "BTU", "F")
   createMaterial("1", "M20");
   var [b, h] = Section.split("x");
-  createSection("1", "Beam", parseInt(b), parseInt(h));
-  // createNode(1,5,0,0);
-  createGroup(1, Text_StructuralGp, [1,2,3],[1,2]);
+  if(Units==="M") g_unit_multFact=0.001;
+    else if(Units==="MM") g_unit_multFact=1.0;
+    else if(Units==="IN") g_unit_multFact=0.393701;
+ await createSection("1", "Beam", parseInt(b)*g_unit_multFact, parseInt(h)*g_unit_multFact);
+ await gettabdetails()
+
+
   startsupport=""
   endsupport=""
   decidestartsupport();
   decideendsupport();
-  createSupport(2,startsupport);
-  createSupport(3,endsupport);
+  if(tabid1===0){
+  createSupport(Coordinate_StartNode_Number,startsupport);
+  createSupport(Coordinate_EndNode_Number,endsupport);
+ 
+  }
+  else{
+    createSupport(Node_StartNode_Number,startsupport);
+    createSupport(Node_EndNode_Number,endsupport);
+  }
+  createGroup(1, Text_StructuralGp, [1,2,3],[1,2]);
   createNodeLoacalAxis("1");
   createNotionalSize("1","0.095");
   AddoffsettoBeam("1",0,Text_StructuralGp);
+}
+
+async function gettabdetails(){
+  if (DivMethod === "Uniform") {
+    if (tabid1 === 0) {//Uniform - Co-Ordinates Tab
+      var lenEachElem = parseFloat(Coordinate_TotalLength) / parseFloat(Number_Length_ofelement);
+      var [x0, y0, z0] = Coordinate_StartNode_Coordinate.split(",")
+      var [x1, y1, z1] = Coordinate_EndNode_Coordinate.split(",")
+      var a, b, c
+      for (let i = 0; i <= Number_Length_ofelement; i++) {
+
+        var xIncrement = (parseFloat(x1) - parseFloat(x0)) / parseFloat(Number_Length_ofelement);
+        var yIncrement = (parseFloat(y1) - parseFloat(y0)) / parseFloat(Number_Length_ofelement);
+        var zIncrement = (parseFloat(z1) - parseFloat(z0)) / parseFloat(Number_Length_ofelement);
+
+        if (i === 0) {
+          await createNode(parseInt(Coordinate_StartNode_Number), parseFloat(x0), parseFloat(y0), parseFloat(z0))
+          a = parseFloat(x0);
+          b = parseFloat(y0);
+          c = parseFloat(z0);
+        }
+        else if (i === parseInt(Number_Length_ofelement)) {
+          await createNode(parseInt(Coordinate_EndNode_Number), parseFloat(x1), parseFloat(y1), parseFloat(z1))
+        }
+        else {
+          await createNode(parseInt(i) + parseInt(Coordinate_StartNode_Number), (parseFloat(a) + parseFloat(xIncrement)), (parseFloat(b) + parseFloat(yIncrement)), (parseFloat(c) + parseFloat(zIncrement)))
+          a = (parseFloat(a) + parseFloat(xIncrement));
+          b = (parseFloat(b) + parseFloat(yIncrement));
+          c = (parseFloat(c) + parseFloat(zIncrement));
+        }
+
+      }
+
+    }
+  else{
+         //Uniform - Node Tab
+         var lenEachElem = parseFloat(Node_TotalLength) / parseFloat(Number_Length_ofelement);
+         var [x0, y0, z0] = ["0", "0", "0"]
+         var a, b, c
+         for (let i = 0; i <= Node_TotalLength; i++) {
+   
+           var xIncrement = parseFloat(lenEachElem);
+           var yIncrement = parseFloat(lenEachElem);
+           var zIncrement = parseFloat(lenEachElem);
+   
+           if (i === 0) {
+             await createNode(parseInt(Node_StartNode_Number), parseFloat(x0), parseFloat(y0), parseFloat(z0))
+             a = parseFloat(x0);
+             b = parseFloat(y0);
+             c = parseFloat(z0);
+           }
+           else {
+             await createNode(parseInt(i) + parseInt(Node_StartNode_Number), (parseFloat(a) + parseFloat(xIncrement)), (parseFloat(b) + parseFloat(yIncrement)), (parseFloat(c) + parseFloat(zIncrement)))
+             a = (parseFloat(a) + parseFloat(xIncrement));
+             b = (parseFloat(b) + parseFloat(yIncrement));
+             c = (parseFloat(c) + parseFloat(zIncrement));
+           }
+   
+         }
+  }
+}
+else {
+  if (tabid1 === 0) {//Max Length - Co-Ordinate
+    var numelems = parseFloat(Coordinate_TotalLength) / parseFloat(Number_Length_ofelement);
+    var [x0, y0, z0] = Coordinate_StartNode_Coordinate.split(",")
+    var [x1, y1, z1] = Coordinate_EndNode_Coordinate.split(",")
+    var a, b, c
+    for (let i = 0; i <= numelems; i++) {
+
+      var xIncrement = (parseFloat(x1) - parseFloat(x0) > 0) ? parseFloat(Number_Length_ofelement) : 0;
+      var yIncrement = (parseFloat(y1) - parseFloat(y0) > 0) ? parseFloat(Number_Length_ofelement) : 0;
+      var zIncrement = (parseFloat(z1) - parseFloat(z0) > 0) ? parseFloat(Number_Length_ofelement) : 0;
+
+      if (i === 0) {
+        await createNode(parseInt(Coordinate_StartNode_Number), parseFloat(x0), parseFloat(y0), parseFloat(z0))
+        a = parseFloat(x0);
+        b = parseFloat(y0);
+        c = parseFloat(z0);
+      }
+      else if (i === parseInt(Number_Length_ofelement)) {
+        await createNode(parseInt(Coordinate_EndNode_Number), parseFloat(x1), parseFloat(y1), parseFloat(z1))
+      }
+      else {
+        await createNode(parseInt(i) + parseInt(Coordinate_StartNode_Number), (parseFloat(a) + parseFloat(xIncrement)), (parseFloat(b) + parseFloat(yIncrement)), (parseFloat(c) + parseFloat(zIncrement)))
+        a = (parseFloat(a) + parseFloat(xIncrement));
+        b = (parseFloat(b) + parseFloat(yIncrement));
+        c = (parseFloat(c) + parseFloat(zIncrement));
+      }
+
+    }
+
+  }
+  else{
+          ////Max Length - Node Tab
+          var lenEachElem = parseFloat(Number_Length_ofelement);
+          var numelems = parseFloat(Node_TotalLength) / parseFloat(Number_Length_ofelement);
+          var [x0, y0, z0] = ["0", "0", "0"]
+          var a, b, c
+          for (let i = 0; i <= numelems; i++) {
+    
+            var xIncrement = parseFloat(lenEachElem);
+            var yIncrement = parseFloat(lenEachElem);
+            var zIncrement = parseFloat(lenEachElem);
+    
+            if (i === 0) {
+              await createNode(parseInt(Node_StartNode_Number), parseFloat(x0), parseFloat(y0), parseFloat(z0))
+              a = parseFloat(x0);
+              b = parseFloat(y0);
+              c = parseFloat(z0);
+            }
+            else {
+              await createNode(parseInt(i) + parseInt(Node_StartNode_Number), (parseFloat(a) + parseFloat(xIncrement)), (parseFloat(b) + parseFloat(yIncrement)), (parseFloat(c) + parseFloat(zIncrement)))
+              a = (parseFloat(a) + parseFloat(xIncrement));
+              b = (parseFloat(b) + parseFloat(yIncrement));
+              c = (parseFloat(c) + parseFloat(zIncrement));
+            }
+    
+          }
+  }
+}
+ // createNode(10,11,21,31)
+    // createNode(12,12,22,32)
+    let i=1;
+    let arrayLen = g_NodeId.length;
+    do{
+      let val = g_NodeId[i];
+      let val1 = g_NodeId[i-1];
+      createBeam(i,parseInt(g_MatID[0]),parseInt(g_SecID[0]),parseInt(val),parseInt(val1))
+      i=++i;
+    } while(i<arrayLen)
+
+    // createElement(1,1,4,100,101)
+
+}
+
+async function createBeam(ID,intMATL,intSECT,intstrtNode,intendNode) {  
+  
+  const response = await fetch(`${baseUrl}/civil/db/elem`, {
+
+    method: "PUT",
+
+    headers: {
+
+      'Content-Type': 'application/json',
+
+      'MAPI-Key': mapiKey
+
+    },
+
+    body: JSON.stringify(({
+      "Assign": {
+        [ID]: {
+          "TYPE": "BEAM",
+            "MATL": intMATL,
+            "SECT": intSECT,
+          
+          "NODE": [
+            
+            intstrtNode,
+            intendNode,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            
+        ],
+        "ANGLE": 0,
+        "STYPE": 0
+        }
+      }
+    }
+    ))
+  });
+
 }
 
 function decidestartsupport() {
@@ -262,7 +456,7 @@ var newid=`${ID}`
   },
   body:JSON.stringify(bd)
 });
-
+g_NodeId.push(ID);
 }
 
 
@@ -338,7 +532,7 @@ async function createMaterial(ID,Name) {
     }
     ))
   });
-
+  g_MatID.push(ID);
 }
 
 //Section
@@ -398,7 +592,7 @@ async function createSection(ID,Name,sizeB,sizeH) {
     }
     ))
   });
-
+  g_SecID.push(ID);
 }
 
 //Group
@@ -413,8 +607,8 @@ async function createGroup(ID,GpName,NList,EList) {
       "Assign": {
         [ID]: {
           "NAME": GpName,
-          "N_LIST": [1,2,3],
-          "E_LIST":[1,2]
+          "N_LIST": NList,
+          "E_LIST":EList
         }
 
       }

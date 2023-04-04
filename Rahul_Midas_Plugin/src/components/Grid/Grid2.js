@@ -44,10 +44,10 @@ export default function AutoGrid() {
               <Divider sx={{height:10,borderBottomWidth: 3 }} />
             </Box>
             <Box sx={{ marginTop: 2  } }>
-              <Label sx={{ml:-50,marginTop:0,position:'absolute'}} >Divided method</Label>
+              <Label  sx={{ml:-50,marginTop:0,position:'absolute'}} >Divided method</Label>
               <Divmethod sx={{marginTop:10 }}/>
               <Label id="Labelid1" sx={{ml:-50,marginTop:1,position:'absolute'}} >Number of element</Label>
-              <Textfield  sx={{ width: { sm: 100, marginLeft: 265, marginTop: 10, position: "absolute" }, "& .MuiInputBase-root": { height: 35 } }}
+              <Textfield   sx={{ width: { sm: 100, marginLeft: 265, marginTop: 10, position: "absolute" }, "& .MuiInputBase-root": { height: 35 } }}
               id="Number_Of_Elements"
               variant="standard"></Textfield>
               <Divider sx={{height:10,borderBottomWidth: 3,marginTop:5 }} />
