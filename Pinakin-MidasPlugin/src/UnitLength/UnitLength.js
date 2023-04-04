@@ -114,14 +114,14 @@ export default function AutoGrid() {
                           {/* Material */}
 
                           <Box> 
-                            <Typography sx={{ color:"grey",  fontFamily:"serif" ,component:"div",  ml:-22,mt:3,font:'caption'}}  >
+                            <Typography id="frmMatl" sx={{ color:"grey",  fontFamily:"serif" ,component:"div",  ml:-22,mt:3,font:'caption'}}  >
                             Material
                             </Typography>                      
                           
                            <SelMat/>
                           
                               {/* Secion */}
-                          <Typography sx={{ color:"grey",  fontFamily:"serif" ,component:"div",  ml:-22,mt:3,font:'caption'}}  >
+                          <Typography id="frmSect"  sx={{ color:"grey",  fontFamily:"serif" ,component:"div",  ml:-22,mt:3,font:'caption'}}  >
                             Section
                             </Typography>                      
                           

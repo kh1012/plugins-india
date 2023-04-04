@@ -16,9 +16,11 @@ const get = async () => {
   })
   if(res.ok){
     const data = (await res.json())["MATL"];
+    document.getElementById('frmMatl').innerText = "Material ID(Material Already Defined)";
     return data;
   }
   else{
+    document.getElementById('frmMatl').innerText = "Material";
     return "";
   }
 }

@@ -15,9 +15,11 @@ const get = async () => {
   })
   if(res.ok){
     const data = (await res.json())["SECT"];
+    document.getElementById('frmSect').innerText = "Section ID(Section Already Defined)";
     return data;
   }
   else{
+    document.getElementById('frmSect').innerText = "Section";
     return "";
   }
 }
@@ -43,7 +45,7 @@ export default function SelectSmall() {
         const sectData = await get();
         const temp = [];
         if(sectData === "") {
-          sectData(defaultSect);
+          setSectList(defaultSect);
         }
         else {
           let keys = Object.keys(sectData);
