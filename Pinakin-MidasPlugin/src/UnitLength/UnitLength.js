@@ -135,7 +135,7 @@ export default function AutoGrid() {
 
                           <Box> 
                             <Typography sx={{ color:"grey",  fontFamily:"serif" ,component:"div",  ml:-22,mt:3,font:'caption'}}  >
-                            Devided Method
+                            Devision Method
                             </Typography>                      
                           
                             <SelDivMethod/>

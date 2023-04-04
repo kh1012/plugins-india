@@ -117,26 +117,61 @@ async function checkMapiKey() {
     if(g_divmethod==="Uniform")
     {
       if(g_tabidT1===0)
-      {
+      {//Uniform - Co-Ordinates Tab
         var lenEachElem = parseFloat(g_T1totlenelem)/parseFloat(g_numelem);
-        for (let i = 0; i <= g_numelem; i++) {
-          var [x0,y0,z0]=g_T1startNodeCoOrd.split(",")
+        var [x0,y0,z0]=g_T1startNodeCoOrd.split(",")
           var [x1,y1,z1]=g_T1endNodeCoOrd.split(",")
+          var a,b,c
+        for (let i = 0; i <= g_numelem; i++) {
+          
           var xIncrement = (parseFloat(x1) - parseFloat(x0))/parseFloat(g_numelem);
           var yIncrement = (parseFloat(y1) - parseFloat(y0))/parseFloat(g_numelem);
           var zIncrement = (parseFloat(z1) - parseFloat(z0))/parseFloat(g_numelem);
+         
           if(i===0){            
             createNode(parseInt(g_T1startNodeNumber),parseFloat(x0),parseFloat(y0),parseFloat(z0))
+             a = parseFloat(x0);
+             b = parseFloat(y0);
+             c = parseFloat(z0);
           }
           else if(i===parseInt(g_numelem)){            
             createNode(parseInt(g_T1endNodeNumber),parseFloat(x1),parseFloat(y1),parseFloat(z1))
           }
           else
           {
-            createNode(parseInt(i)+parseInt(g_T1startNodeNumber),(parseFloat(x0)+parseFloat(xIncrement)),(parseFloat(y0)+parseFloat(yIncrement)),(parseFloat(z0)+parseFloat(zIncrement)))
-            x0=(parseFloat(x0)+parseFloat(xIncrement));
-            y0=(parseFloat(y0)+parseFloat(yIncrement));
-            z0=(parseFloat(z0)+parseFloat(zIncrement));
+            createNode(parseInt(i)+parseInt(g_T1startNodeNumber),(parseFloat(a)+parseFloat(xIncrement)),(parseFloat(b)+parseFloat(yIncrement)),(parseFloat(c)+parseFloat(zIncrement)))
+            a=(parseFloat(a)+parseFloat(xIncrement));
+            b=(parseFloat(b)+parseFloat(yIncrement));
+            c=(parseFloat(c)+parseFloat(zIncrement));
+          }
+          
+        }
+
+      }
+      else
+      {
+        //Uniform - Node Tab
+        var lenEachElem = parseFloat(g_T2totlenelem)/parseFloat(g_numelem);
+        var [x0,y0,z0]=["0","0","0"]
+        var a,b,c
+        for (let i = 0; i <= g_numelem; i++) {
+          
+          var xIncrement = parseFloat(lenEachElem);
+          var yIncrement =parseFloat(lenEachElem);
+          var zIncrement = parseFloat(lenEachElem);
+         
+          if(i===0){            
+            createNode(parseInt(g_T2startnodenum),parseFloat(x0),parseFloat(y0),parseFloat(z0))
+             a = parseFloat(x0);
+             b = parseFloat(y0);
+             c = parseFloat(z0);
+          }          
+          else
+          {
+            createNode(parseInt(i)+parseInt(g_T2startnodenum),(parseFloat(a)+parseFloat(xIncrement)),(parseFloat(b)+parseFloat(yIncrement)),(parseFloat(c)+parseFloat(zIncrement)))
+            a=(parseFloat(a)+parseFloat(xIncrement));
+            b=(parseFloat(b)+parseFloat(yIncrement));
+            c=(parseFloat(c)+parseFloat(zIncrement));
           }
           
         }
@@ -146,8 +181,69 @@ async function checkMapiKey() {
     }
     else
     {
+      
+      if(g_tabidT1===0)
+      {//Max Length - Co-Ordinate
+        var numelems = parseFloat(g_T1totlenelem)/parseFloat(g_numelem);
+        var [x0,y0,z0]=g_T1startNodeCoOrd.split(",")
+          var [x1,y1,z1]=g_T1endNodeCoOrd.split(",")
+          var a,b,c
+        for (let i = 0; i <= numelems; i++) {
+          
+          var xIncrement = (parseFloat(x1)- parseFloat(x0) > 0) ? parseFloat(g_numelem) : 0;
+          var yIncrement = (parseFloat(y1)- parseFloat(y0) > 0) ? parseFloat(g_numelem):0;
+          var zIncrement = (parseFloat(z1)- parseFloat(z0) > 0) ?parseFloat(g_numelem):0;
+         
+          if(i===0){            
+            createNode(parseInt(g_T1startNodeNumber),parseFloat(x0),parseFloat(y0),parseFloat(z0))
+             a = parseFloat(x0);
+             b = parseFloat(y0);
+             c = parseFloat(z0);
+          }
+          else if(i===parseInt(g_numelem)){            
+            createNode(parseInt(g_T1endNodeNumber),parseFloat(x1),parseFloat(y1),parseFloat(z1))
+          }
+          else
+          {
+            createNode(parseInt(i)+parseInt(g_T1startNodeNumber),(parseFloat(a)+parseFloat(xIncrement)),(parseFloat(b)+parseFloat(yIncrement)),(parseFloat(c)+parseFloat(zIncrement)))
+            a=(parseFloat(a)+parseFloat(xIncrement));
+            b=(parseFloat(b)+parseFloat(yIncrement));
+            c=(parseFloat(c)+parseFloat(zIncrement));
+          }
+          
+        }
 
+      }
+      else
+      {
+        ////Max Length - Node Tab
+        var lenEachElem = parseFloat(g_numelem);
+        var numelems = parseFloat(g_T2totlenelem)/parseFloat(g_numelem);
+        var [x0,y0,z0]=["0","0","0"]
+        var a,b,c
+        for (let i = 0; i <= numelems; i++) {
+          
+          var xIncrement = parseFloat(lenEachElem);
+          var yIncrement =parseFloat(lenEachElem);
+          var zIncrement = parseFloat(lenEachElem);
+         
+          if(i===0){            
+            createNode(parseInt(g_T2startnodenum),parseFloat(x0),parseFloat(y0),parseFloat(z0))
+             a = parseFloat(x0);
+             b = parseFloat(y0);
+             c = parseFloat(z0);
+          }          
+          else
+          {
+            createNode(parseInt(i)+parseInt(g_T2startnodenum),(parseFloat(a)+parseFloat(xIncrement)),(parseFloat(b)+parseFloat(yIncrement)),(parseFloat(c)+parseFloat(zIncrement)))
+            a=(parseFloat(a)+parseFloat(xIncrement));
+            b=(parseFloat(b)+parseFloat(yIncrement));
+            c=(parseFloat(c)+parseFloat(zIncrement));
+          }
+          
+        }
 
+      }
     }
     // createNode(10,11,21,31)
     // createNode(12,12,22,32)
