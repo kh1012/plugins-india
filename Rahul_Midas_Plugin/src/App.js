@@ -31,6 +31,8 @@ var CB_NodeLoacalAxis;
 var CB_Notionalsize;
 var CB_RestraintsSupports;
 var CB_BeamEndOffset;
+var startsupport ="";
+var endsupport ="";
 var SFX
 var SFY
 var SFZ
@@ -45,7 +47,7 @@ var EMY
 var EMZ
 var StartOffset
 var EndOffset
-
+var g_unit_multFact
 function getids(){
   Units=document.getElementById("Units").innerText;
   Material=document.getElementById("Material").innerText;
@@ -109,14 +111,116 @@ function getids(){
 }
 
 
-function StartApplication()
-{
+function StartApplication() {
   getids();
   checkMapiKey();
-createNode(1,5,0,0);
-createUnit("KN","MM","BTU","F")
+  createUnit("KN", "MM", "BTU", "F")
+  createMaterial("1", "M20");
+  var [b, h] = Section.split("x");
+  createSection("1", "Beam", parseInt(b), parseInt(h));
+  // createNode(1,5,0,0);
+  createGroup(1, "Column", [1,2,3],[1,2]);
+  startsupport=""
+  endsupport=""
+  decidestartsupport();
+  decideendsupport();
+  createSupport(2,startsupport);
+  createSupport(3,endsupport);
+  createNodeLoacalAxis("1");
 }
 
+function decidestartsupport() {
+
+  if (SFX) {
+    startsupport = startsupport + "1";
+  }
+  else {
+    startsupport = startsupport + "0";
+  }
+
+  if (SFY) {
+    startsupport = startsupport + "1";
+  }
+  else {
+    startsupport = startsupport + "0";
+  }
+  if (SFZ) {
+    startsupport = startsupport + "1";
+  }
+  else {
+    startsupport = startsupport + "0";
+  }
+
+  if (SMX) {
+    startsupport = startsupport + "1";
+  }
+  else {
+    startsupport = startsupport + "0";
+  }
+
+  if (SMY) {
+    startsupport = startsupport + "1";
+  }
+  else {
+    startsupport = startsupport + "0";
+  }
+
+  if (SMZ) {
+    startsupport = startsupport + "1";
+  }
+  else {
+    startsupport = startsupport + "0";
+  }
+  startsupport = startsupport + "0";
+}
+
+
+function decideendsupport() {
+
+  if (EFX) {
+    endsupport = endsupport + "1";
+  }
+  else {
+    endsupport = endsupport + "0";
+  }
+
+  if (EFY) {
+    endsupport = endsupport + "1";
+  }
+  else {
+    endsupport = endsupport + "0";
+  }
+  if (EFZ) {
+    endsupport = endsupport + "1";
+  }
+  else {
+    endsupport = endsupport + "0";
+  }
+
+  if (EMX) {
+    endsupport = endsupport + "1";
+  }
+  else {
+    endsupport = endsupport + "0";
+  }
+
+  if (EMY) {
+    endsupport = endsupport + "1";
+  }
+  else {
+    endsupport = endsupport + "0";
+  }
+
+  if (EMZ) {
+    endsupport = endsupport + "1";
+  }
+  else {
+    endsupport = endsupport + "0";
+  }
+  endsupport = endsupport + "0";
+}
+
+//check the mapi key
 async function checkMapiKey() {
   // mapiKey를 QueryString으로부터 가져 옵니다.
 
@@ -133,6 +237,8 @@ async function checkMapiKey() {
    console.log( JSON.stringify(await response.json(), null, 2));
 }
 
+
+///creates the node
 async function createNode(ID,X,Y,Z){
 var newid=`${ID}`
   var bd={
@@ -157,6 +263,7 @@ var newid=`${ID}`
 }
 
 
+//Creates the Unit
 async function createUnit(Force, DIST, Heat, temp) {
 
   const response = await fetch(`${baseUrl}/${programType}/db/unit`, {
@@ -180,8 +287,199 @@ async function createUnit(Force, DIST, Heat, temp) {
     ))
 
   });
+
+if(DIST==="M") g_unit_multFact=0.001;
+else if(DIST==="MM") g_unit_multFact=1.0;
+else if(DIST==="IN") g_unit_multFact=0.393701
 }
 
+//file by material,section
+async function createMaterial(ID,Name) {  
+  
+  const response = await fetch(`${baseUrl}/${programType}/db/matl`, {
+
+    method: "PUT",
+
+    headers: {
+
+      'Content-Type': 'application/json',
+
+      'MAPI-Key': mapiKey
+
+    },
+
+    body: JSON.stringify(({
+      "Assign": {
+        [ID]: {
+          "TYPE": "CONC",
+          "NAME": Name,
+          "HE_SPEC": 0,
+          "HE_COND": 0,
+          "THMAL_UNIT": "C",
+          "PLMT": 0,
+          "P_NAME": "",
+          "bMASS_DENS": false,
+          "DAMP_RAT": 0.05,
+          "PARAM": [
+            {
+                "P_TYPE": 1,
+                "STANDARD": "IS(RC)",
+                "CODE": "",
+                "DB": Name,
+                "bELAST": false,
+                "ELAST": 22360000
+            }
+        ]
+        }
+      }
+    }
+    ))
+  });
+
+}
+
+//Section
+async function createSection(ID,Name,sizeB,sizeH) {  
+  console.log(Name)
+  console.log(sizeB*g_unit_multFact)
+  console.log(sizeH*g_unit_multFact)
+  const response = await fetch(`${baseUrl}/${programType}/db/sect`, {
+
+    method: "PUT",
+
+    headers: {
+
+      'Content-Type': 'application/json',
+
+      'MAPI-Key': mapiKey
+
+    },
+
+    body: JSON.stringify(({
+      "Assign": {
+        [ID]: {
+          "SECTTYPE": "DBUSER",
+          "SECT_NAME": Name,
+          "SECT_BEFORE": {
+            "OFFSET_PT": "CC",
+            "OFFSET_CENTER": 0,
+            "USER_OFFSET_REF": 0,
+            "HORZ_OFFSET_OPT": 0,
+            "USERDEF_OFFSET_YI": 0,
+            "VERT_OFFSET_OPT": 0,
+            "USERDEF_OFFSET_ZI": 0,
+            "USE_SHEAR_DEFORM": true,
+            "USE_WARPING_EFFECT": false,
+            "SHAPE": "SB",
+            "DATATYPE": 2,
+            "SECT_I": {
+              "vSIZE": [
+                sizeB,
+                sizeH,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]           
+            
+            
+            }    
+
+          }
+        }        
+      }
+    }
+    ))
+  });
+
+}
+
+//Group
+async function createGroup(ID,GpName,NList,EList) {
+  const response = await fetch(`${baseUrl}/${programType}/db/grup`, {
+    method: "PUT",
+    headers: {
+      'Content-Type': 'application/json',
+      'MAPI-Key': mapiKey
+    },
+    body: JSON.stringify(({
+      "Assign": {
+        [ID]: {
+          "NAME": GpName,
+          "N_LIST": [1,2,3],
+          "E_LIST":[1,2]
+        }
+
+      }
+    }
+
+    ))
+
+  });
+
+  console.log( JSON.stringify(await response.json(), null, 2));
+}
+
+//Support
+async function createSupport(startsupportid,startsupport) {
+  const response = await fetch(`${baseUrl}/${programType}/db/cons`, {
+    method: "PUT",
+    headers: {
+      'Content-Type': 'application/json',
+      'MAPI-Key': mapiKey
+    },
+    body: JSON.stringify(({
+      "Assign": {
+        [startsupportid]: {
+            "ITEMS": [
+                {
+                    "ID": 1,
+                    "CONSTRAINT": startsupport
+                }
+            ]
+        }
+    }
+    }
+
+    ))
+
+  });
+
+  console.log( JSON.stringify(await response.json(), null, 2));
+}
+
+//Node Local Axis
+async function createNodeLoacalAxis(id) {
+  const response = await fetch(`${baseUrl}/${programType}/db/skew`, {
+    method: "post",
+    headers: {
+      'Content-Type': 'application/json',
+      'MAPI-Key': mapiKey
+    },
+    body: JSON.stringify(({
+      "Assign": {
+        [id]: 
+          {
+            "iMETHOD": 1,
+            "ANGLE_X": 43.0,
+            "ANGLE_Y": 44.0,
+            "ANGLE_Z": 45.0
+          }
+        
+
+      }
+    }
+
+    ))
+
+  });
+
+  console.log(JSON.stringify(await response.json(), null, 2));
+}
 
 function App() {
   return (
