@@ -17,7 +17,7 @@ export default function TextFieldSizes() {
         <TextField
           label=""
           id="T2startnodenum"
-          defaultValue=""
+          defaultValue="100"
           size="large"
           variant="standard"
         />
@@ -32,7 +32,7 @@ export default function TextFieldSizes() {
         <TextField
           label=""
           id="T2endnodenum"
-          defaultValue=""
+          defaultValue="110"
           size="large"
           variant="standard"
         />
@@ -47,7 +47,7 @@ export default function TextFieldSizes() {
         <TextField
           label=""
           id="T2totlenelem"
-          defaultValue=""
+          defaultValue="10"
           size="large"
           variant="standard"
         />
