@@ -5,7 +5,6 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { AlignHorizontalRight } from '@mui/icons-material';
 import { green } from '@mui/material/colors';
-import {isEmpty} from 'lodash';
 const get = async () => {
 
   const res = await fetch('https://api-beta.midasit.com:443/civil/db/matl', {
@@ -17,10 +16,21 @@ const get = async () => {
 
   if(res.ok){
     const data = (await res.json())["MATL"];
+
     return data;
+  }
+  else{
+
+    return "";
   }
 
 }
+
+const defaultMatl = [
+  {"M20": 10},
+  {"M30": 20},
+  {"M40": 30},
+]
 
 export default function SelectVariants() {
   const [age, setAge] = React.useState('');
@@ -37,9 +47,6 @@ export default function SelectVariants() {
     const initAsync = async () => {
      
      const matlData = await get();
-     
-
-     
       const temp = [];
       // if(matlData===undefined){
       //   temp.push([1, "M30"])
@@ -47,13 +54,21 @@ export default function SelectVariants() {
       //   temp.push([3, "M40"])
       // }
       // else{
-      if(matlData !== undefined)
-        for (const key of Object.keys(matlData) ) {
-          temp.push([key, matlData[key].NAME])
+        if(matlData === "") {
+          setMatlList(defaultMatl);
+        }
+        else {
+          let keys = Object.keys(matlData);
+          for ( let idx = 0; idx < keys.length; idx++ ) {
+            const matlId = keys[idx];
+            const TempObj = {};
+            TempObj[matlId] = matlData[matlId];
+            temp.push(TempObj)
+          }
+       
+          setMatlList(temp);
         }
       // }
-      setMatlList(temp);
-
     }
 
     //Async, Sync
@@ -72,24 +87,11 @@ export default function SelectVariants() {
           // label="m"
           // defaultValue={matlList.length !== 0 ? parseInt(matlList[0][0]) : 1}
         >
-          {/* role of map() in javascript & {} is enable to variable string*/}
-          { isEmpty(matlList) ?
-            <>       
-            <MenuItem  value={0}>M20</MenuItem>
-            <MenuItem value={1}>M25</MenuItem>
-            <MenuItem value={2}>M30</MenuItem>
-            <MenuItem value={3}>M35</MenuItem>
-            <MenuItem value={4}>M40</MenuItem>
-            <MenuItem value={5}>M50</MenuItem>
-            </>
-            :
-            matlList.map((pairValue, idx) => {
-              const matlId = pairValue[0];
-              const matlName = pairValue[1];
-              return <MenuItem key={idx} value={parseInt(matlId)}>{matlName}</MenuItem>
-            })
-          }
-
+         {matlList.map((value, idx) => {
+            const matlId = Object.keys(value)[0];
+            const matlInfo = value[matlId];
+            return <MenuItem key={idx} value={matlInfo}>{matlId}</MenuItem>
+          })}
         </Select>
       </FormControl>
     </div>

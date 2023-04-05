@@ -6,12 +6,60 @@ import Select from '@mui/material/Select';
 import { AlignHorizontalRight } from '@mui/icons-material';
 import { green } from '@mui/material/colors';
 
+const get = async () => {
+  const res = await fetch('https://api-beta.midasit.com:443/civil/db/sect', {
+    headers: {
+      "Content-Type": "application/json",
+      "MAPI-Key":window.mapikey
+    }
+  })
+  if(res.ok){
+    const data = (await res.json())["SECT"];
+    return data;
+  }
+  else{
+    return "";
+  }
+}
+
+const defaultSect = [
+  {"200X300": 10},
+  {"300X300": 20},
+  {"300X500": 30},
+]
+
 export default function SelectVariants() {
   const [age, setAge] = React.useState('');
 
   const handleChange = (event) => {
     setAge(event.target.value);
   };
+
+  //react State (useState)
+  const [sectList, setSectList] = React.useState([]);
+  //react Hook (useEffect)
+  React.useEffect(() => {
+    const initAsync = async () => {
+      const sectData = await get();
+      const temp = [];
+      if(sectData === "") {
+        setSectList(defaultSect);
+      }
+      else {
+        let keys = Object.keys(sectData);
+        for ( let idx = 0; idx < keys.length; idx++ ) {
+          const sectId = keys[idx];
+          const TempObj = {};
+          TempObj[sectId] = sectData[sectId];
+          temp.push(TempObj)
+        }
+        setSectList(temp);
+      }
+    }
+
+    //Async, Sync
+    initAsync();
+  }, []);
 
   return (
     <div>
@@ -23,8 +71,11 @@ export default function SelectVariants() {
           onChange={handleChange}
           label="m"
         >
-          <MenuItem value={10}>200x300</MenuItem>
-          <MenuItem value={20}>300x300</MenuItem>
+           {sectList.map((value, idx) => {
+                              const sectId = Object.keys(value)[0];
+                              const sectInfo = value[sectId];
+                              return <MenuItem key={idx} value={sectInfo}>{sectId}</MenuItem>
+                            })}
 
         </Select>
       </FormControl>

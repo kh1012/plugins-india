@@ -146,7 +146,7 @@ async function StartApplication() {
   }
   createGroup(1, Text_StructuralGp, [1,2,3],[1,2]);
   createNodeLoacalAxis("1");
-  createNotionalSize("1","0.095");
+  createNotionalSize("1",Text_Notionalsize);
   AddoffsettoBeam("1",0,Text_StructuralGp);
 }
 

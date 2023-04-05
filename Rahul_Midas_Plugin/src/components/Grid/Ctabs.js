@@ -74,7 +74,7 @@ export default function BasicTabs() {
                     <Typography sx={{ color:"grey",  fontFamily:"serif" ,component:"div",  ml:-78,mt:5,font:'caption'}}  >
                             Total Length of Elements
                     </Typography> 
-                    <Typography id={'totelemlen1'} sx={{ color:"grey",  fontFamily:"serif" ,component:"div",  ml:85,mt:-1,font:'caption',position:'absolute'}}  >
+                    <Typography id="Coordinate_Length" sx={{ color:"grey",  fontFamily:"serif" ,component:"div",  ml:85,mt:-1,font:'caption',position:'absolute'}}  >
                             m
                     </Typography>
                     <T1/>
@@ -89,7 +89,7 @@ export default function BasicTabs() {
                     <Typography sx={{ color:"grey",  fontFamily:"serif" ,component:"div",  ml:-65,mt:5,font:'caption'}}  >
                             Total Length of Elements
                     </Typography> 
-                    <Typography id={'totelemlen2'}sx={{ color:"grey",  fontFamily:"serif" ,component:"div",  ml:75,mt:-1,font:'caption',position:'absolute'}}  >
+                    <Typography id="Node_Length" sx={{ color:"grey",  fontFamily:"serif" ,component:"div",  ml:75,mt:-1,font:'caption',position:'absolute'}}  >
                             m
                     </Typography> 
                     <T2/>

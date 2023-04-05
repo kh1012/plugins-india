@@ -13,7 +13,7 @@ export default function SelectVariants() {
     setAge(event.target.value);
     if (event.target.value == 20) {
       document.getElementById('Labelid1').innerText = "Length of element"
-      document.getElementById('Labelid2').innerText = document.getElementById('demo-simple-select-standard1').innerText
+      document.getElementById('Labelid2').innerText = document.getElementById('Units').innerText
     }
     else {
       document.getElementById('Labelid1').innerText = "Number of element"
