@@ -45,9 +45,9 @@ export default function PostProcess(){
       <Header/>
       <BoxComp>
         <Stack direction={"row"}>
-          <Box sx={{ml:1, mt:2, mr:1, mb:2, width:'45vw', height: '40vh', display:"flex", flexDirection: "column", flexWrap:"wrap"}}>
+          <Box sx={{ml:1, mt:2, mr:1, mb:2, width:'45vw', height: '35vh', display:"flex", flexDirection: "column"}}>
             <DataChart/>
-            <Divider sx={{my: 3}} />
+            <Divider sx={{my: 1.5}} />
             <DiagramOpt/>
           </Box>
           <Box sx={{p:5, mt:2, ml:1, mr:1, mb:2, width:window.innerWidth*0.25, background:"#FFFFFF"}}>
