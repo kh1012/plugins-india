@@ -1,10 +1,10 @@
 import * as Chart from "@coreui/react-chartjs"
+import * as React from "react";
 
-export default function DataChart(){
+export default function DataChart(props){
   return (
     <Chart.CChart
-      style={{background:"#FFFFFF"}}
-      height={"100%"}
+      style={{background:"#FFFFFF", height: 'auto'}}
       type="line"
       data={{
         labels: ["January", "February", "March", "April", "May", "June", "July"],

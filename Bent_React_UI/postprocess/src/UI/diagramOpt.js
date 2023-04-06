@@ -10,7 +10,7 @@ import Stack from "@mui/material/Stack";
 
 export default function DiagramOpt() {
   return (
-    <Box sx={{background:"#FFFFFF"}}>
+    <Box sx={{background:"#FFFFFF", height:50, position:"relative"}} >
       <FormControl>
         <Stack direction={"row"}>
           <FormLabel id="demo-row-radio-buttons-group-label" sx={{mr:5, mt:1, ml:2}}>Diagram options</FormLabel>
@@ -23,11 +23,11 @@ export default function DiagramOpt() {
             <FormControlLabel value="Node_Number" control={<Radio />} label="Node Number"/>
             <FormControlLabel value="Node_X-Coordinations" control={<Radio />} label="Node X-Coordinations" />
           </RadioGroup>
+          <FormControlLabel control={<Checkbox defaultChecked />} label="Show Legend" />
 
         </Stack>
       </FormControl>
       <Box sx={{float:"right"}}>
-        <FormControlLabel control={<Checkbox defaultChecked />} label="Show Legend" />
       </Box>
     </Box>
   )

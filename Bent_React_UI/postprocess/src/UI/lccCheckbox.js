@@ -5,8 +5,9 @@ import Checkbox from '@mui/material/Checkbox';
 import Box from "@mui/material/Box";
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
-import { DataGrid } from "@mui/x-data-grid";
+// import { DataGrid } from "@mui/x-data-grid";
 import Grid1 from '@mui/material/Grid';
+import Stack from "@mui/material/Stack";
 
 const get = async () => {
   const res = await fetch('https://api-beta.midasit.com:443/civil/db/lcom', {
@@ -35,7 +36,7 @@ const LoadCombination = [
   {"LC3": 30},
 ]
 
-export default function LoadCaseCombinationList() {
+export default function LoadCaseCombinationList(props) {
 
   const [LoadCombList, setLoadCombList] = React.useState(LoadCombination);
 
@@ -55,11 +56,8 @@ export default function LoadCaseCombinationList() {
           TempObj[matlId] = matlData[matlId].NAME;
           temp.push(TempObj)
         }
-        console.log(temp);
         setLoadCombList(temp);
       }
-      
-
     }
 
     //Async, Sync
@@ -80,23 +78,34 @@ export default function LoadCaseCombinationList() {
   }
 
   return (
-    <Box   sx={{height:"50%"}}>
+    <Box sx={{height:600, p:1, display:"flex", justifyContent:"center"}}>
+      <Stack>
       <Typography sx={{mb:1, ml:1}}>Load Case and Combinations</Typography>
-     <div  >
-      <Box  sx={{height:"100%", border:1, p:2}}>
-      
-        {/* <DataGrid> */}
-        {/* <Typography sx={{float:"left", mt:1}}> */}
+      <Box sx={{ height:500, width:props.width*0.8, border:1, p:1 }}>
+        <Box sx={{display:"flex",
+                  flexDirection: "column", 
+                  overflow: "hidden",
+                  overflowY: "scroll",
+                  height:480,
+                  width:props.width*0.75,
+                  ml:2, mt:1
+                }}>
           {LoadCombList.map((value, idx) => {
-          // const matlId = Object.keys(value)[0];
-          const matlId = value[idx+1];
-          const matlInfo = value;
-          return <div><FormControlLabel id="checkedid" labelPlacement='start' control={<Checkbox onClick={() => {displayLoadcombination(matlId)}} sx={{ml:25}} /> } label={matlId} key={idx} value={matlInfo}/></div>
-        })}
-        {/* </DataGrid> */}
-     
+            // const matlId = Object.keys(value)[0];
+            const matlId = value[idx+1];
+            const matlInfo = value;
+            {/* <DataGrid> */}
+            return (
+                <Box>
+                  <Typography sx={{float:"left", mt:1}}>{matlId}</Typography>
+                  <Checkbox key={idx} value={matlInfo} sx={{float:"right", ml:12}} onClick={() => {displayLoadcombination(matlId)}} />
+                </Box>
+              )
+          })}
+          {/* </DataGrid> */}
+        </Box>
       </Box>
-      </div>
+      </Stack>
     </Box>
   );
 }
