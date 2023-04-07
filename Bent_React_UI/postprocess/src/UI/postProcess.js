@@ -11,7 +11,8 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
-
+import Button from '@mui/material/Button';
+import {checkboxlist} from "./lccCheckbox.js";
 export default function PostProcess(){
   const [windowSize, setWindowSize] = React.useState({
     width: window.innerWidth,
@@ -40,14 +41,28 @@ export default function PostProcess(){
     display:"flex", justifyContent:"center"
   })
 
+  
+  function Storethedata(){
+    var i=0;
+    while(i<checkboxlist.length){
+      if(checkboxlist[i]!==undefined){
+        console.log(checkboxlist[i]);
+      }
+      
+      i++
+    }
+
+  }
+
+
   return (
     <React.Fragment>
       <Header/>
       <BoxComp>
         <Stack direction={"row"}>
-          <Box sx={{ml:1, mt:2, mr:1, mb:2, width:'45vw', height: '35vh', display:"flex", flexDirection: "column"}}>
+          <Box sx={{ml:1, mt:2, mr:1, mb:2, width:'45vw', height: '40vh', display:"flex", justifyContent:"center", flexDirection: "column", flexWrap:"wrap"}}>
             <DataChart/>
-            <Divider sx={{my: 1.5}} />
+            <Divider sx={{my: 3}} />
             <DiagramOpt/>
           </Box>
           <Box sx={{p:5, mt:2, ml:1, mr:1, mb:2, width:window.innerWidth*0.25, background:"#FFFFFF"}}>
@@ -62,6 +77,11 @@ export default function PostProcess(){
           </Box>
         </Stack>
       </BoxComp>
+    
+     
+      <Button onClick={Storethedata} sx={{ml:"50vw", marginTop:3}} variant='contained'> Refresh window</Button>
+
+  
     </React.Fragment>
   )
 }
