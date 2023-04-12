@@ -7,7 +7,7 @@ export default function ElemOrNodeNum() {
   return (
     <Box sx={{height:50}}>
       <Typography sx={{float:"left", mt:2.5}}>Elements or Nodes Number</Typography>
-      <TextField sx={{float:"right"}} id="standard-basic" label="Standard" variant="standard" />
+      <TextField id="Id_Elemstring" sx={{float:"right"}}  label="Standard" variant="standard" />
     </Box>
   );
 }

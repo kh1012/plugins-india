@@ -10,15 +10,15 @@ import Stack from "@mui/material/Stack";
 export var checkboxlist= [];
 
 const get = async () => {
-  const res = await fetch('https://api-beta.midasit.com:443/civil/db/lcom', {
+  const res = await fetch('https://api-beta.midasit.com:443/civil/db/lcom-conc', {
     headers: {
       "Content-Type": "application/json",
       // "MAPI-Key": "eyJ1ciI6ImxoeTAxMTgiLCJwZyI6ImNpdmlsIiwiY24iOiIwak9lUTJnYlJRIn0.d54292d340fc5e847d1f8220c3d316d8738c29ebc40ca5901f539ad6be44c66c"
-      "MAPI-Key": "eyJ1ciI6IlJhaHVsTWlkYXM5NiIsInBnIjoiY2l2aWwiLCJjbiI6IlJUcFFrTFc5UncifQ.21254819edd8409ffe30936b4a10a8c0a441162db161927aba42206ae6be9abb"
+      "MAPI-Key": "eyJ1ciI6IlJhaHVsTWlkYXM5NiIsInBnIjoiY2l2aWwiLCJjbiI6ImxSWDYxaHJyU3cifQ.88542eb15481c61e46d3d5ade01e510d413bd6a8403f7b270dda635645fc07a3"
     }
   })
   if(res.ok){
-    const data = (await res.json())["LCOM"];
+    const data = (await res.json())["LCOM-CONC"];
     
     return data;
   }
@@ -53,7 +53,7 @@ export default function LoadCaseCombinationList(props) {
         for ( let idx = 0; idx < keys.length; idx++ ) {
           const matlId = keys[idx];
           const TempObj = {};
-          TempObj[matlId] = matlData[matlId].NAME;
+          TempObj[matlId] = matlData[matlId].NAME+"(CBC)";
           temp.push(TempObj)
         }
         setLoadCombList(temp);
@@ -107,7 +107,7 @@ const displayLoadcombination = event=>{
             return (
                 <Box>
                   <Typography sx={{float:"left", mt:1}}>{matlId}</Typography>
-                  <Checkbox key={idx} value={matlId} sx={{float:"right", ml:12}}  onChange={displayLoadcombination} />
+                  <Checkbox key={idx} value={matlId} sx={{float:"right", ml:12}}  onClick={displayLoadcombination} />
                 </Box>
               )
           })}
