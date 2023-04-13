@@ -14,6 +14,14 @@ import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import {checkboxlist} from "./lccCheckbox.js";
 import MyResponsiveLine from './dataChart';
+import { getLCP } from 'web-vitals';
+const baseUrl = 'https://api-beta.midasit.com:443';
+const programType = 'civil';
+window.baseUrl = baseUrl;
+const NodestringResult=[];
+var Noderesult = [];
+
+var displacementvalues=[];
 var element=[];
 var elementstring;
 var graphmethod="NodeNum";
@@ -38,6 +46,8 @@ var MUnit={
   'RY':false,
   'RZ':false
  };
+
+ 
 
  var Force={
   'F':false,
@@ -98,7 +108,7 @@ const changecoordinate=[
 
 export default function PostProcess(){
   const [data,setData]=React.useState([]);
-
+  const [Annotation,setAnnotation]=React.useState([]);
   const [windowSize, setWindowSize] = React.useState({
     width: window.innerWidth,
     height: window.innerHeight
@@ -140,10 +150,104 @@ export default function PostProcess(){
 
   }
 
-  function Updatethechart(){
-  getdata();
-showchart();
+  async function Updatethechart() {
+    var Components;
+    var Table_Type;
+    getdata();
+    if (Displacement.D) {
+      Components = [
+        "Node",
+        "Load",
+        "DX",
+        "DY",
+        "DZ",
+        "RX",
+        "RY",
+        "RZ"
+      ];
+      Table_Type = "DISPLACEMENTG";
+      await getresulttable(Table_Type, Components);
+      await generatestring();
+    }
+    showchart();
   }
+
+  async function generatestring() {
+    var nodeid;
+    var dinc = 0;
+    var Lcomb = [];
+    var Disp;
+    var D_rot;
+
+   
+    //nodeid=(z+1).toString;
+    for (let t = 0; t < element.length; t++) {
+      var Disp_Value = {
+        'NodeID': 0,
+        'LComb': [],
+        'D': [],
+        'R': [],
+      };
+      Disp_Value.NodeID = element[t];
+      Noderesult.push(Disp_Value);
+    }
+
+    for (let t = 0; t < element.length; t++) {
+      for (let z = t; z < displacementvalues.length; z = z + element.length) {
+        Noderesult[t].LComb.push(displacementvalues[z].LComb);
+        Noderesult[t].D.push(displacementvalues[z].D);
+        Noderesult[t].R.push(displacementvalues[z].R);
+      }
+    }
+
+    console.log(Noderesult);
+  }
+
+async function getresulttable(Table_Type,Components){
+  const response = await fetch(`${baseUrl}/${programType}/post/table`, {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+      'MAPI-Key': window.MAPI_Key
+    },
+    body: JSON.stringify(({
+      "Argument": {
+        "TABLE_NAME": "example",
+        "TABLE_TYPE": Table_Type,
+        "NODE_ELEMS": {
+        "KEYS": element
+        },
+        "LOAD_CASE_NAMES": checkboxlist,
+        "COMPONENTS":Components
+        }
+    }
+
+    ))
+
+  });
+
+  var res= await response.json();
+
+  var N=element.length*checkboxlist.length;
+  for(let k=0;k<N;k++){
+
+    var Disp_Value={
+      'NodeID':0,
+      'LComb':0,
+      'D':[],
+      'R':[],
+     };
+
+    Disp_Value.NodeID=res.example.DATA[k][1];
+    Disp_Value.LComb=res.example.DATA[k][2];
+    Disp_Value.D=[res.example.DATA[k][3],res.example.DATA[k][4],res.example.DATA[k][5]];
+    Disp_Value.R=[res.example.DATA[k][6],res.example.DATA[k][7],res.example.DATA[k][7]];
+    displacementvalues.push(Disp_Value);
+  }
+ 
+
+}
+
   async function Extractelement(st) {
     element=[];
     const spacesplitter = st.split(" ");
@@ -186,7 +290,7 @@ showchart();
         Displacement.RY = document.getElementById('Id_RY').checked;
         Displacement.RZ = document.getElementById('Id_RZ').checked;
       }
-      console.log(Displacement.D);
+     
     }
     else if (tabD === -1 && tabF === 0 && tabS === -1) {
       Force.F = document.getElementById('Id_F').checked;

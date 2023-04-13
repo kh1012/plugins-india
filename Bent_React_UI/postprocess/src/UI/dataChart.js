@@ -1,6 +1,17 @@
 import { ResponsiveLine } from '@nivo/line';
 import ReactDOM from "react-dom/client";
 import * as React from 'react';
+
+const AnnotationDefaultData = [
+    {"1": "NodeID:1"},
+    {"2": "Lcom:cLCB1"},
+    {"3": "Dx=0.000,Dy=0.0002,Dz=0.0002"},
+    {"4": "Rx=0.000,Ry=0.00003,Rz=0.000043"},
+  ]
+  
+
+// const AnnotationData= React.useState(AnnotationDefaultData);
+
 export default function MyResponsiveLine (props){
   return(
     <ResponsiveLine
@@ -41,8 +52,46 @@ export default function MyResponsiveLine (props){
       pointBorderColor={{ from: 'serieColor' }}
       pointLabelYOffset={-12}
       useMesh={true}
+      tooltip={point => {
+        return (<div
+            style={{
+                background: 'skyblue',
+                padding: '9px 12px',
+                border: '1px solid #ccc',
+            }}
+        >
+              {AnnotationDefaultData.map((value, idx) => {
+                        return <div key={idx} value={10}>{value[idx+1]}</div>
+                      })}
+        </div>);
+      }}
+    //   sliceTooltip={({ slice }) => {
+    //     return (
+    //         <div
+    //             style={{
+    //                 background: 'white',
+    //                 padding: '9px 12px',
+    //                 border: '1px solid #ccc',
+    //             }}
+    //         >
+    //             <div>x: {slice.id}</div>
+    //             {slice.points.map(point => (
+    //                 <div
+    //                     key={point.id}
+    //                     style={{
+    //                         color: point.serieColor,
+    //                         padding: '3px 0',
+    //                     }}
+    //                 >
+    //                     <strong>Rahul</strong> [{point.data.yFormatted}]
+    //                 </div>
+    //             ))}
+    //         </div>
+    //     )
+    //  }}      
       legends={[
           {
+            
               anchor: 'bottom-right',
               direction: 'column',
               justify: false,
