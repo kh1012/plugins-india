@@ -105,7 +105,7 @@ const displayLoadcombination = event=>{
             const matlInfo = value;
             {/* <DataGrid> */}
             return (
-                <Box>
+                <Box key={"Box" + idx}>
                   <Typography sx={{float:"left", mt:1}}>{matlId}</Typography>
                   <Checkbox key={idx} value={matlId} sx={{float:"right", ml:12}}  onClick={displayLoadcombination} />
                 </Box>
