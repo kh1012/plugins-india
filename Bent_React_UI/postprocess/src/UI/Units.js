@@ -84,31 +84,30 @@ export default function Units () {
       <Typography>Units</Typography>
         <Stack>
           <Box sx={{ mt:1}}>
-          <Typography sx={{float:"left", mt:2.5}}>Force</Typography>
-          <FormControl  sx={{float:"right"}} variant="standard">
-                <Select id="Id_Force" sx={{float:"right" ,width:'15vw',height:'3vh',mt:'1vh' , textAlign:'center',border:'none'}} onChange={handleChange} defaultValue={10} >
-                  {unitList.map((value, idx) => {
-                    if(value["1"] !== undefined){
-                      return <MenuItem key={idx} value={10}>{value['1']['FORCE']}</MenuItem>
-                    }
-                  })}
-                  </Select>
-                  </FormControl>
+            <Typography sx={{float:"left", mt:2.5}}>Force</Typography>
+            <FormControl  sx={{float:"right"}} variant="standard">
+              <Select id="Id_Force" sx={{float:"right" ,width:'15vw',height:'3vh',mt:'1vh' , textAlign:'center',border:'none'}} onChange={handleChange} defaultValue={10} >
+                {unitList.map((value, idx) => {
+                  if(value["1"] !== undefined){
+                    return <MenuItem key={idx} value={10}>{value['1']['FORCE']}</MenuItem>
+                  }
+                })}
+              </Select>
+            </FormControl>
           </Box>
           <Box sx={{mT:2}}>
-          <Typography sx={{float:"left", mt:2.5}}>Length</Typography>
-          <FormControl  sx={{float:"right"}} variant="standard">
-          <Select id="Id_Length" sx={{float:"right" ,width:'15vw',height:'3vh',mt:'1vh' , textAlign:'center'}} onChange={handleChange} defaultValue={10} >
-            {unitList.map((value, idx) => {
-              if(value["1"] !== undefined){
-                        return <MenuItem key={idx} value={10}>{value['1']['DIST']}</MenuItem>
-              }
-            })}
-            </Select>
+            <Typography sx={{float:"left", mt:2.5}}>Length</Typography>
+            <FormControl  sx={{float:"right"}} variant="standard">
+              <Select id="Id_Length" sx={{float:"right" ,width:'15vw',height:'3vh',mt:'1vh' , textAlign:'center'}} onChange={handleChange} defaultValue={10} >
+                {unitList.map((value, idx) => {
+                  if(value["1"] !== undefined){
+                    return <MenuItem key={idx} value={10}>{value['1']['DIST']}</MenuItem>
+                  }
+                })}
+              </Select>
             </FormControl>
           </Box>
         </Stack>
     </Box>
-
   )
 }
