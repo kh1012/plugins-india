@@ -35,15 +35,15 @@ export default function LabTabs() {
     const [displacement, SetDisplacement] = React.useState(props.Checked);
     const [radioValue, setRadioValue] = React.useState('Displacement');
 
-    function handelDX(event){
+    function handleDX(event){
       SetDisplacement([event.target.checked, displacement[1], displacement[2]]);
     }
 
-    function handelDY(event){
+    function handleDY(event){
       SetDisplacement([displacement[0], event.target.checked, displacement[2]]);
     }
 
-    function handelDZ(event){
+    function handleDZ(event){
       SetDisplacement([displacement[0], displacement[1], event.target.checked]);
     }
 
@@ -69,9 +69,9 @@ export default function LabTabs() {
         >
           <FormControlLabel value="Displacement" control={<Radio id="Id_D" />} label="Displacement" />
           <Box sx={{ml:4, mb:1, width:"100%"}}>
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DX" onChange={handelDX} checked={displacement[0]}/>} label="DX" disabled={radioValue !== "Displacement" ? true : false} />
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DY" onChange={handelDY} checked={displacement[1]}/>} label="DY" disabled={radioValue !== "Displacement" ? true : false} />
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DZ" onChange={handelDZ} checked={displacement[2]}/>} label="DZ" disabled={radioValue !== "Displacement" ? true : false} />
+            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DX" onChange={handleDX} checked={displacement[0]}/>} label="DX" disabled={radioValue !== "Displacement" ? true : false} />
+            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DY" onChange={handleDY} checked={displacement[1]}/>} label="DY" disabled={radioValue !== "Displacement" ? true : false} />
+            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DZ" onChange={handleDZ} checked={displacement[2]}/>} label="DZ" disabled={radioValue !== "Displacement" ? true : false} />
           </Box>
           <FormControlLabel value="Angular displacement" control={<Radio id="Id_AD"/>} label="Angular displacement" />
           <Box sx={{ml:4, width:"100%"}}>
