@@ -1,13 +1,16 @@
 import { ResponsiveLine } from '@nivo/line';
 import ReactDOM from "react-dom/client";
 import * as React from 'react';
+var index;
+var Arry=[]
 
-const AnnotationDefaultData = [
-    {"1": "NodeID:1"},
-    {"2": "Lcom:cLCB1"},
-    {"3": "Dx=0.000,Dy=0.0002,Dz=0.0002"},
-    {"4": "Rx=0.000,Ry=0.00003,Rz=0.000043"},
-  ]
+// const AnnotationDefaultData = [
+//     {"1": "NodeID:1"},
+//     {"2": "Lcom:cLCB1"},
+//     {"3": "Dx=0.000,Dy=0.0002,Dz=0.0002"},
+//     {"4": "Rx=0.000,Ry=0.00003,Rz=0.000043"},
+//   ]
+// const AnnotationDefaultData=[];
   
 
 // const AnnotationData= React.useState(AnnotationDefaultData);
@@ -23,7 +26,6 @@ export default function MyResponsiveLine (props){
           type: 'linear',
           min: 'auto',
           max: 'auto',
-        
       }}
       yFormat=" >-.2f"
       axisTop={null}
@@ -53,16 +55,31 @@ export default function MyResponsiveLine (props){
       pointLabelYOffset={-12}
       useMesh={true}
       tooltip={point => {
+
+        {
+          try{
+          Arry=props.AnnotationDefaultData[point.point.data.x].split(",");
+          }
+          catch(e){
+
+          }
+        }
+
+
+
         return (<div
-            style={{
-                background: 'skyblue',
-                padding: '9px 12px',
-                border: '1px solid #ccc',
-            }}
+          style={{
+            background: 'skyblue',
+            padding: '9px 12px',
+            border: '1px solid #ccc',
+          }}
         >
-              {AnnotationDefaultData.map((value, idx) => {
-                        return <div key={idx} value={10}>{value[idx+1]}</div>
+              {
+              Arry.map((value, idx) => {
+                        return <div key={idx} value={10}>{value}</div>
+
                       })}
+                      
         </div>);
       }}
     //   sliceTooltip={({ slice }) => {

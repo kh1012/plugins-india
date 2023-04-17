@@ -14,7 +14,7 @@ const get = async () => {
     headers: {
       "Content-Type": "application/json",
       // "MAPI-Key": "eyJ1ciI6ImxoeTAxMTgiLCJwZyI6ImNpdmlsIiwiY24iOiIwak9lUTJnYlJRIn0.d54292d340fc5e847d1f8220c3d316d8738c29ebc40ca5901f539ad6be44c66c"
-      "MAPI-Key": "eyJ1ciI6IlJhaHVsTWlkYXM5NiIsInBnIjoiY2l2aWwiLCJjbiI6ImxSWDYxaHJyU3cifQ.88542eb15481c61e46d3d5ade01e510d413bd6a8403f7b270dda635645fc07a3"
+      "MAPI-Key": window.MAPI_Key
     }
   })
   if(res.ok){
