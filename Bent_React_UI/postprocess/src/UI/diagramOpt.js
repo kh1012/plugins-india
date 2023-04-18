@@ -10,7 +10,7 @@ import Stack from "@mui/material/Stack";
 
 export default function DiagramOpt() {
   return (
-    <Box sx={{background:"#FFFFFF", height:50, position:"relative", ml:'-45vw', mt:'45vh'}} >
+    <Box sx={{background:"#FFFFFF", height:50, position:"relative", ml:'-45vw', mt:'51vh'}} >
       <FormControl>
         <Stack direction={"row"}>
           <FormLabel id="demo-row-radio-buttons-group-label" sx={{mr:5, mt:1, ml:2}}>Diagram options</FormLabel>

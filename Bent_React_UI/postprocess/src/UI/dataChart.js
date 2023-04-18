@@ -35,7 +35,7 @@ export default function MyResponsiveLine (props){
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: 'Node No',
+          legend:props.GM,
           legendOffset: 36,
           legendPosition: 'middle'
       }}
@@ -54,58 +54,22 @@ export default function MyResponsiveLine (props){
       pointBorderColor={{ from: 'serieColor' }}
       pointLabelYOffset={-12}
       useMesh={true}
-      tooltip={point => {
-
-        {
-          try{
-          Arry=props.AnnotationDefaultData[point.point.data.x].split(",");
-          }
-          catch(e){
-
-          }
-        }
-
-
-
-        return (<div
+      tooltip={point => (
+        <div
           style={{
-            background: 'skyblue',
-            padding: '9px 12px',
-            border: '1px solid #ccc',
+            color: "white",
+            background: '#333',
+            padding: '12px 16px',
           }}
         >
-              {
-              Arry.map((value, idx) => {
-                        return <div key={idx} value={10}>{value}</div>
-
-                      })}
-                      
-        </div>);
-      }}
-    //   sliceTooltip={({ slice }) => {
-    //     return (
-    //         <div
-    //             style={{
-    //                 background: 'white',
-    //                 padding: '9px 12px',
-    //                 border: '1px solid #ccc',
-    //             }}
-    //         >
-    //             <div>x: {slice.id}</div>
-    //             {slice.points.map(point => (
-    //                 <div
-    //                     key={point.id}
-    //                     style={{
-    //                         color: point.serieColor,
-    //                         padding: '3px 0',
-    //                     }}
-    //                 >
-    //                     <strong>Rahul</strong> [{point.data.yFormatted}]
-    //                 </div>
-    //             ))}
-    //         </div>
-    //     )
-    //  }}      
+          <strong>Values:</strong>
+          <br />
+          {`x: ${point.point.data.x}`}
+          <br />
+          {`y: ${point.point.data.y}`}
+        </div>
+      )}
+      
       legends={[
           {
             

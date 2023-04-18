@@ -22,6 +22,15 @@ function a11yProps(index) {
 export default function LabTabs() {
   const [value, setValue] = React.useState('Displacement');
   const [DisChecked, SetDisChecked] = React.useState([false, false, false]);
+  const [displacement, SetDisplacement] = React.useState([false,false,false]);
+  const [force, SetForce] = React.useState([false,false,false,false]);
+  const [moment, SetMoment] = React.useState([false,false,false,false]);
+  const [Individualstress, SetIS] = React.useState([false,false,false,false,false]);
+  const [Cstress, SetCS] = React.useState([false,false,false,false,false]);
+  const [Angulardisplacement, SetADisplacement] = React.useState([false,false,false]);
+  const [displacementradiovalue,SetDRB]=React.useState('Displacement');
+  const [Forceradiovalue,SetFMRB]=React.useState('Force');
+  const [Stressradiovalue,SetSRB]=React.useState('Individual Stress');
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -32,32 +41,60 @@ export default function LabTabs() {
   }
 
   function DisplacementCompo (props){
-    const [displacement, SetDisplacement] = React.useState(props.Checked);
-    const [radioValue, setRadioValue] = React.useState('Displacement');
+   
+    
+    const [radioValue, setRadioValue] = React.useState();
 
     function handleDX(event){
       SetDisplacement([event.target.checked, displacement[1], displacement[2]]);
+     
+      SetADisplacement([false,false,false]);
     }
 
     function handleDY(event){
       SetDisplacement([displacement[0], event.target.checked, displacement[2]]);
+   
+      SetADisplacement([false,false,false]);
     }
 
     function handleDZ(event){
       SetDisplacement([displacement[0], displacement[1], event.target.checked]);
+      SetADisplacement([false,false,false]);
+    }
+    
+    function handleRX(event){
+      SetADisplacement([event.target.checked, Angulardisplacement[1], Angulardisplacement[2]]);
+      SetDisplacement([false,false,false]);
+    }
+    function handleRY(event){
+      SetADisplacement([Angulardisplacement[0], event.target.checked, Angulardisplacement[2]]);
+      SetDisplacement([false,false,false]);
     }
 
+    function handleRZ(event){
+      SetADisplacement([Angulardisplacement[0], Angulardisplacement[1], event.target.checked]);
+      SetDisplacement([false,false,false]);
+    }
+
+
+
     const handleRadioChange = (event) => {
-      setRadioValue(event.target.value);
+      SetDRB(event.target.value);
     };
 
-    React.useEffect(() => {
-      function setDisplacementCheckedValue(){
-        props.setCheckValue(displacement);
-      }
+    // React.useEffect(() => {
+  
+    //   function setDisplacementCheckedValue(){
+    //     if(radioValue==="Displacement"){
+    //     props.setCheckValue(displacement);
+    //   }
+    //   else{
+    //     props.setCheckValue(Angulardisplacement);
+    //   }
+    // }
 
-      setDisplacementCheckedValue();
-    }, [displacement]);
+    //   setDisplacementCheckedValue();
+    // });
 
     return (
       <FormControl sx={{width:"100%"}}>
@@ -65,19 +102,19 @@ export default function LabTabs() {
           aria-labelledby="displacement-radio-buttons-group-label"
           name="displacement-radio-buttons-group"
           onChange={handleRadioChange}
-          value={radioValue}
+          value={displacementradiovalue}
         >
           <FormControlLabel value="Displacement" control={<Radio id="Id_D" />} label="Displacement" />
           <Box sx={{ml:4, mb:1, width:"100%"}}>
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DX" onChange={handleDX} checked={displacement[0]}/>} label="DX" disabled={radioValue !== "Displacement" ? true : false} />
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DY" onChange={handleDY} checked={displacement[1]}/>} label="DY" disabled={radioValue !== "Displacement" ? true : false} />
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DZ" onChange={handleDZ} checked={displacement[2]}/>} label="DZ" disabled={radioValue !== "Displacement" ? true : false} />
+            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DX" onChange={handleDX} checked={displacement[0]}/>} label="DX" disabled={displacementradiovalue !== "Displacement" ? true : false} />
+            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DY" onChange={handleDY} checked={displacement[1]}/>} label="DY" disabled={displacementradiovalue !== "Displacement" ? true : false} />
+            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DZ" onChange={handleDZ} checked={displacement[2]}/>} label="DZ" disabled={displacementradiovalue !== "Displacement" ? true : false} />
           </Box>
           <FormControlLabel value="Angular displacement" control={<Radio id="Id_AD"/>} label="Angular displacement" />
           <Box sx={{ml:4, width:"100%"}}>
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox  id="Id_RX" />} label="RX" />
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_RY" />} label="RY" />
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox  id="Id_RZ"/>} label="RZ" />
+            <FormControlLabel sx={{width:"30%"}} control={<Checkbox  id="Id_RX" />} onChange={handleRX}  checked={Angulardisplacement[0]} label="RX" disabled={displacementradiovalue === "Displacement" ? true : false}  />
+            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_RY" />} onChange={handleRY} checked={Angulardisplacement[1]} label="RY" disabled={displacementradiovalue === "Displacement" ? true : false} />
+            <FormControlLabel sx={{width:"30%"}} control={<Checkbox  id="Id_RZ"/>} onChange={handleRZ}  checked={Angulardisplacement[2]} label="RZ" disabled={displacementradiovalue === "Displacement" ? true : false} />
           </Box>
         </RadioGroup>
       </FormControl>
@@ -86,35 +123,130 @@ export default function LabTabs() {
 
 
   function ForceMoment (props){
+    function handleFX(event){
+      SetForce([event.target.checked, force[1], force[2],force[3]]);
+      SetMoment([false,false,false,false]);
+    }
 
+    function handleFY(event){
+      SetForce([ force[0],event.target.checked, force[2],force[3]]);
+      SetMoment([false,false,false,false]);
+    }
 
+    function handleFZ(event){
+      SetForce([ force[0], force[1],event.target.checked,force[3]]);
+      SetMoment([false,false,false,false]);
+    }
+    function handleFYZ(event){
+      SetForce([ force[0], force[1],force[2],event.target.checked]);
+      SetMoment([false,false,false,false]);
+    }
+    
+    function handleMX(event){
+      SetMoment([ event.target.checked,moment[1], moment[2],moment[3]]);
+      SetForce([false,false,false,false]);
+    }
+    function handleMY(event){
+      SetMoment([ moment[0],event.target.checked, moment[2],moment[3]]);
+      SetForce([false,false,false,false]);
+    }
+
+    function handleMZ(event){
+      SetMoment([ moment[0], moment[1],event.target.checked,moment[3]]);
+      SetForce([false,false,false,false]);
+    }
+    function handleMYZ(event){
+      SetMoment([ moment[0], moment[1],moment[2],event.target.checked]);
+      SetForce([false,false,false,false]);
+    }
+    const handleRadioChange = (event) => {
+      SetFMRB(event.target.value);
+    };
     return (
       <FormControl sx={{width:"100%"}}>
         <RadioGroup
           aria-labelledby="ForceMoment-radio-buttons-group-label"
           defaultValue="Force"
           name="ForceMoment-radio-buttons-group"
+          onChange={handleRadioChange}
+          value={Forceradiovalue}
+
         >
           <FormControlLabel value="Force" control={<Radio id="Id_F" />} label="Force" />
           <Box sx={{ml:4, mb:1, width:"100%"}}>
-            <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Fx" />} label="Fx" />
-            <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Fy" />} label="Fy" />
-            <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Fz" />} label="Fz" />
-            <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Fyz" />} label="Fyz" />
+            <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Fx" onChange={handleFX} checked={force[0]}/>} label="Fx" disabled={Forceradiovalue !== "Force" ? true : false}/>
+            <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Fy" onChange={handleFY} checked={force[1]} />} label="Fy" disabled={Forceradiovalue !== "Force" ? true : false} />
+            <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Fz" onChange={handleFZ} checked={force[2]} />} label="Fz" disabled={Forceradiovalue !== "Force" ? true : false} />
+            <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Fyz" onChange={handleFYZ} checked={force[3]} />} label="Fyz" disabled={Forceradiovalue !== "Force" ? true : false} />
           </Box>
           <FormControlLabel value="Moment" control={<Radio id="Id_M" />} label="Moment" />
           <Box sx={{ml:4, width:"100%"}}>
-            <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Mx" />} label="Mx" />
-            <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_My" />} label="My" />
-            <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Mz" />} label="Mz" />
-            <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Myz" />} label="Myz" />
+            <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Mx" onChange={handleMX} checked={moment[0]} />} label="Mx" disabled={Forceradiovalue === "Force" ? true : false}/>
+            <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_My" onChange={handleMY} checked={moment[1]} />} label="My" disabled={Forceradiovalue === "Force" ? true : false}/>
+            <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Mz" onChange={handleMZ} checked={moment[2]} />} label="Mz" disabled={Forceradiovalue === "Force" ? true : false} />
+            <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Myz" onChange={handleMYZ} checked={moment[3]} />} label="Myz" disabled={Forceradiovalue === "Force" ? true : false} />
           </Box>
         </RadioGroup>
       </FormControl>
     )
   }
 
+
   function Stress (props) {
+    function handleSax(event){
+      SetIS([event.target.checked, Individualstress[1], Individualstress[2],Individualstress[3],Individualstress[4]]);
+      SetCS([false,false,false,false]);
+    }
+
+    function handleSsy(event){
+      SetIS([ Individualstress[0],event.target.checked, Individualstress[2],Individualstress[3],Individualstress[4]]);
+      SetCS([false,false,false,false]);
+    }
+
+    function handleSsz(event){
+      SetIS([ Individualstress[0], Individualstress[1],event.target.checked,Individualstress[3],Individualstress[4]]);
+      SetCS([false,false,false,false]);
+    }
+    function handleSby(event){
+      SetIS([ Individualstress[0], Individualstress[1],Individualstress[2],event.target.checked,Individualstress[4]]);
+      SetCS([false,false,false,false]);
+    }
+    
+    function handleSbz(event){
+      SetIS([Individualstress[0], Individualstress[1],Individualstress[2],Individualstress[3],event.target.checked]);
+      SetCS([false,false,false,false]);
+    }
+
+    function handleC4(event){
+      SetCS([Cstress[0], Cstress[1],Cstress[2],Cstress[3],event.target.checked]);
+      SetIS([false,false,false,false]);
+    }
+
+    function handlemax(event){
+      SetCS([event.target.checked, Cstress[1], Cstress[2],Cstress[3],Cstress[4]]);
+      SetIS([false,false,false,false]);
+    }
+
+    function handleC1(event){
+      SetCS([ Cstress[0],event.target.checked, Cstress[2],Cstress[3],Cstress[4]]);
+      SetIS([false,false,false,false]);
+    }
+
+    function handleC2(event){
+      SetCS([ Cstress[0], Cstress[1],event.target.checked,Cstress[3],Cstress[4]]);
+      SetIS([false,false,false,false]);
+    }
+    function handleC3(event){
+      SetCS([ Cstress[0], Cstress[1],Cstress[2],event.target.checked,Cstress[4]]);
+      SetIS([false,false,false,false]);
+    }
+    
+
+  
+    
+    const handleRadioChange = (event) => {
+      SetSRB(event.target.value);
+    };
 
     return (
       <FormControl sx={{width:"100%"}}>
@@ -122,22 +254,24 @@ export default function LabTabs() {
         aria-labelledby="Stress-radio-buttons-group-label"
         defaultValue="Combined Stress"
         name="Stress-radio-buttons-group"
+        onChange={handleRadioChange}
+        value={Stressradiovalue}
       >
         <FormControlLabel value="Individual Stress" control={<Radio id="Id_Is" />} label="Individual Stress" />
         <Box sx={{ml:4, mb:1, width:"100%"}}>
-          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Sax" />} label="Sax" />
-          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Ssy" />} label="Ssy" />
-          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Ssz" />} label="Ssz" />
-          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Sby" />} label="Sby" />
-          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Sbz" />} label="Sbz" />
+          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Sax" onChange={handleSax} checked={Individualstress[0]} />} label="Sax" disabled={Stressradiovalue !== "Individual Stress" ? true : false}/>
+          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Ssy" onChange={handleSsy} checked={Individualstress[1]}/>} label="Ssy" disabled={Stressradiovalue !== "Individual Stress" ? true : false} />
+          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Ssz" onChange={handleSsz} checked={Individualstress[2]} />} label="Ssz" disabled={Stressradiovalue !== "Individual Stress" ? true : false} />
+          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Sby" onChange={handleSby} checked={Individualstress[3]} />} label="Sby" disabled={Stressradiovalue !== "Individual Stress" ? true : false} />
+          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Sbz"  onChange={handleSbz} checked={Individualstress[4]}/>} label="Sbz" disabled={Stressradiovalue !== "Individual Stress" ? true : false} />
         </Box>
         <FormControlLabel value="Combined Stress" control={<Radio id="Id_CS" />} label="Combined Stress" />
         <Box sx={{ml:4, width:"100%"}}>
-          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Max" />} label="Maximum" />
-          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_C1" />} label="1 (-y, +z)" />
-          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_C2" />} label="2 (+y, +z)" />
-          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_C3" />} label="3 (+y, -z)" />
-          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_C4" />} label="4 (-y, -z)" />
+          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Max" onChange={handlemax} checked={Cstress[0]} />} label="Maximum" disabled={Stressradiovalue === "Individual Stress" ? true : false} />
+          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_C1"  onChange={handleC1} checked={Cstress[1]}/>} label="1 (-y, +z)" disabled={Stressradiovalue === "Individual Stress" ? true : false} />
+          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_C2"  onChange={handleC2} checked={Cstress[2]} />} label="2 (+y, +z)" disabled={Stressradiovalue === "Individual Stress" ? true : false} />
+          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_C3"  onChange={handleC3} checked={Cstress[3]} />} label="3 (+y, -z)" disabled={Stressradiovalue === "Individual Stress" ? true : false} />
+          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_C4"  onChange={handleC4} checked={Cstress[4]}/>} label="4 (-y, -z)" disabled={Stressradiovalue === "Individual Stress" ? true : false} />
         </Box>
       </RadioGroup>
     </FormControl>
@@ -158,7 +292,7 @@ export default function LabTabs() {
           <DisplacementCompo setCheckValue={handleClick} Checked={DisChecked} />
         </TabPanel>
         <TabPanel value="Force/Moment">
-          <ForceMoment />
+          <ForceMoment  />
         </TabPanel>
         <TabPanel value="Stress">
           <Stress/>

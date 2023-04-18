@@ -6,6 +6,10 @@ import Units from './Units';
 import LoadCaseCombinationList from './lccCheckbox';
 import ElemOrNodeNum from './ElemOrNode_Num';
 import OptionTabs from './optionTabs';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import 'reactjs-popup/dist/index.css';
+import PropTypes from 'prop-types';
 // MUI
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -15,6 +19,33 @@ import Button from '@mui/material/Button';
 import { checkboxlist } from "./lccCheckbox.js";
 import MyResponsiveLine from './dataChart';
 import { getLCP } from 'web-vitals';
+
+
+
+function SimpleDialog(props) {
+  const { onClose, selectedValue, open } = props;
+
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
+
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <Box width="50vw" height='25' backgroundColor="ovary">
+      <DialogTitle width="25vw" align='center'>Processing!</DialogTitle>
+      </Box>
+    </Dialog>
+  );
+}
+
+SimpleDialog.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  selectedValue: PropTypes.string.isRequired,
+};
+
+//
+
 const baseUrl = 'https://api-beta.midasit.com:443';
 const programType = 'civil';
 window.baseUrl = baseUrl;
@@ -22,7 +53,7 @@ var NodeDataCollection = {};
 var supportNodeColleection=[];
 var obj;
 var Nodeidcollection = [];
-const NodestringResult = [];
+var NodestringResult = [];
 var Noderesult = {};
 var displacementstring = [];
 var displacementvalues = [];
@@ -33,7 +64,7 @@ var StressusedLC=[];
 var element = [];
 var elementstring;
 var graphmethod = "NodeNum";
-var MAPI_Key = "eyJ1ciI6IlJhaHVsTWlkYXM5NiIsInBnIjoiY2l2aWwiLCJjbiI6IldLeG5qcVRHVEEifQ.2105aa2fae882ecad773c7e6850ef863d0ab4510b8ef7851b67ebd8dee610b25";
+var MAPI_Key = "eyJ1ciI6IlJhaHVsTWlkYXM5NiIsInBnIjoiY2l2aWwiLCJjbiI6IjAyMURtUWxZVHcifQ.305412b34074b366859d71986b0a4f9c9995eb24c1aa82ab02a73ff2a6fb5198";
 window.MAPI_Key = MAPI_Key;
 const dt = [
 ];
@@ -116,6 +147,14 @@ const changecoordinate = [
 ]
 
 export default function PostProcess() {
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState();
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const [GM, setGMData] = React.useState("Node");
   const [data, setData] = React.useState([]);
   const [Annotation, setAnnotation] = React.useState([]);
   const [windowSize, setWindowSize] = React.useState({
@@ -133,19 +172,27 @@ export default function PostProcess() {
 
 
   function Storethedata() {
-    var i = 0;
+   setData([]);
 
-    while (i < checkboxlist.length) {
-      if (checkboxlist[i] !== undefined) {
-        console.log(checkboxlist[i]);
-      }
+  }
 
-      i++
-    }
+  function reinitialise(){
+    Noderesult = {};
+    Nodeidcollection = [];
+    NodestringResult = [];
+    Noderesult = {};
+    displacementstring = [];
+    displacementvalues = [];
+    Forcevalues = {};
+    forceusedLC = [];
+    Stressvalues = {};
+    StressusedLC = [];
 
   }
 
   async function Updatethechart() {
+    setOpen(true);
+    reinitialise();
     var Components;
     var Table_Type;
     var i = 0;
@@ -249,10 +296,8 @@ export default function PostProcess() {
     // await generatestringForce();
     // await changethegraph();
   }
-
-
-
-
+ 
+  setOpen(false);
   }
 
   async function changethegraph() {
@@ -269,7 +314,7 @@ export default function PostProcess() {
     if(Force.F){
       await creategraphforForceAlternative();
     }
-    if(Force.M){
+    if(!Force.F){
       await  creategraphforMomentAlternative();
     }
     
@@ -313,25 +358,25 @@ export default function PostProcess() {
         tempjson.id = LC;
         var xcoord;
         if (graphmethod === "NodeNum") {
-          xcoord =elemdt[element[i]].NODE[1];
-        }
-        else {
-          xcoord = await getnodexcoord(elemdt[element[i]].NODE[1]);
-        }
-      //  tempjson.data[0].x = xcoord;
-        // tempjson.data[0].y=await getdisplacementvalue(elemdt[i+1].NODE[0],dir,checkboxlist[z]);
-        //tempjson.data[0].y = Noderesult[elemdt[i + 1].NODE[1]].D[LC][dir] * factor;
-        tempjson.data.push({'x':xcoord ,'y':Noderesult[elemdt[element[i]].NODE[1]].D[LC][dir] * factor})
-      
-        if (graphmethod === "NodeNum") {
           xcoord =elemdt[element[i]].NODE[0];
         }
         else {
           xcoord = await getnodexcoord(elemdt[element[i]].NODE[0]);
         }
+      //  tempjson.data[0].x = xcoord;
+        // tempjson.data[0].y=await getdisplacementvalue(elemdt[i+1].NODE[0],dir,checkboxlist[z]);
+        //tempjson.data[0].y = Noderesult[elemdt[i + 1].NODE[1]].D[LC][dir] * factor;
+        tempjson.data.push({'x':xcoord ,'y':Noderesult[elemdt[element[i]].NODE[0]].D[LC][dir] * factor})
+      
+        if (graphmethod === "NodeNum") {
+          xcoord =elemdt[element[i]].NODE[1];
+        }
+        else {
+          xcoord = await getnodexcoord(elemdt[element[i]].NODE[1]);
+        }
         // tempjson.data[1].x = xcoord;
         // tempjson.data[1].y = Noderesult[elemdt[i + 1].NODE[0]].D[LC][dir] * factor;
-        tempjson.data.push({'x':xcoord ,'y':Noderesult[elemdt[element[i]].NODE[0]].D[LC][dir] * factor})
+        tempjson.data.push({'x':xcoord ,'y':Noderesult[elemdt[element[i]].NODE[1]].D[LC][dir] * factor})
         // Nodeidcollection.push(elemdt[i + 1].NODE[1]);
         // Nodeidcollection.push(elemdt[i + 1].NODE[0]);
        
@@ -482,18 +527,18 @@ export default function PostProcess() {
         tempjson.id = LC;
         var xcoord;
         if (graphmethod === "NodeNum") {
-          xcoord = elemdt[element[i]].NODE[1];
-        }
-        else {
-          xcoord = await getnodexcoord(elemdt[element[i]].NODE[1]);
-        }
-  
-        tempjson.data.push({ 'x': xcoord, 'y': ForceValue[element[i]].Part['I']['F'][dir] * factor });
-        if (graphmethod === "NodeNum") {
           xcoord = elemdt[element[i]].NODE[0];
         }
         else {
           xcoord = await getnodexcoord(elemdt[element[i]].NODE[0]);
+        }
+  
+        tempjson.data.push({ 'x': xcoord, 'y': ForceValue[element[i]].Part['I']['F'][dir] * factor });
+        if (graphmethod === "NodeNum") {
+          xcoord = elemdt[element[i]].NODE[1];
+        }
+        else {
+          xcoord = await getnodexcoord(elemdt[element[i]].NODE[1]);
         }
         tempjson.data.push({ 'x': xcoord, 'y': ForceValue[element[i]].Part['J']['F'][dir] * factor });
       }
@@ -504,13 +549,13 @@ export default function PostProcess() {
   async function creategraphforMomentAlternative() {
     var dir = 0;
 
-    if (Force.FX) {
+    if (Force.Mx) {
       dir = 0;
     }
-    else if (Force.FY) {
+    else if (Force.My) {
       dir = 1;
     }
-    else if (Force.FZ) {
+    else if (Force.Mz) {
       dir = 2;
     }
   
@@ -534,18 +579,18 @@ export default function PostProcess() {
         tempjson.id = LC;
         var xcoord;
         if (graphmethod === "NodeNum") {
-          xcoord = elemdt[element[i]].NODE[1];
-        }
-        else {
-          xcoord = await getnodexcoord(elemdt[element[i]].NODE[1]);
-        }
-  
-        tempjson.data.push({ 'x': xcoord, 'y': ForceValue[element[i]].Part['I']['M'][dir] * factor });
-        if (graphmethod === "NodeNum") {
           xcoord = elemdt[element[i]].NODE[0];
         }
         else {
           xcoord = await getnodexcoord(elemdt[element[i]].NODE[0]);
+        }
+  
+        tempjson.data.push({ 'x': xcoord, 'y': ForceValue[element[i]].Part['I']['M'][dir] * factor });
+        if (graphmethod === "NodeNum") {
+          xcoord = elemdt[element[i]].NODE[1];
+        }
+        else {
+          xcoord = await getnodexcoord(elemdt[element[i]].NODE[1]);
         }
         tempjson.data.push({ 'x': xcoord, 'y': ForceValue[element[i]].Part['J']['M'][dir] * factor });
       }
@@ -632,18 +677,18 @@ export default function PostProcess() {
         tempjson.id = LC;
         var xcoord;
         if (graphmethod === "NodeNum") {
-          xcoord = elemdt[element[i]].NODE[1];
-        }
-        else {
-          xcoord = await getnodexcoord(elemdt[element[i]].NODE[1]);
-        }
-  
-        tempjson.data.push({ 'x': xcoord, 'y': ForceValue[element[i]].Part['I']['ST'][dir] * factor });
-        if (graphmethod === "NodeNum") {
           xcoord = elemdt[element[i]].NODE[0];
         }
         else {
           xcoord = await getnodexcoord(elemdt[element[i]].NODE[0]);
+        }
+  
+        tempjson.data.push({ 'x': xcoord, 'y': ForceValue[element[i]].Part['I']['ST'][dir] * factor });
+        if (graphmethod === "NodeNum") {
+          xcoord = elemdt[element[i]].NODE[1];
+        }
+        else {
+          xcoord = await getnodexcoord(elemdt[element[i]].NODE[1]);
         }
         tempjson.data.push({ 'x': xcoord, 'y': ForceValue[element[i]].Part['J']['ST'][dir] * factor });
       }
@@ -670,18 +715,18 @@ export default function PostProcess() {
         tempjson.id = LC;
         var xcoord;
         if (graphmethod === "NodeNum") {
-          xcoord = elemdt[element[i]].NODE[1];
-        }
-        else {
-          xcoord = await getnodexcoord(elemdt[element[i]].NODE[1]);
-        }
-  
-        tempjson.data.push({ 'x': xcoord, 'y': ForceValue[element[i]].Part['I']['CS'][dir] * factor });
-        if (graphmethod === "NodeNum") {
           xcoord = elemdt[element[i]].NODE[0];
         }
         else {
           xcoord = await getnodexcoord(elemdt[element[i]].NODE[0]);
+        }
+  
+        tempjson.data.push({ 'x': xcoord, 'y': ForceValue[element[i]].Part['I']['CS'][dir] * factor });
+        if (graphmethod === "NodeNum") {
+          xcoord = elemdt[element[i]].NODE[1];
+        }
+        else {
+          xcoord = await getnodexcoord(elemdt[element[i]].NODE[1]);
         }
         tempjson.data.push({ 'x': xcoord, 'y': ForceValue[element[i]].Part['J']['CS'][dir] * factor });
       }
@@ -967,7 +1012,7 @@ export default function PostProcess() {
       Disp_Value.NodeID = res.example.DATA[k][1];
       Disp_Value.LComb = res.example.DATA[k][2];
       Disp_Value.D = [res.example.DATA[k][3], res.example.DATA[k][4], res.example.DATA[k][5]];
-      Disp_Value.R = [res.example.DATA[k][6], res.example.DATA[k][7], res.example.DATA[k][7]];
+      Disp_Value.R = [res.example.DATA[k][6], res.example.DATA[k][7], res.example.DATA[k][8]];
       displacementvalues.push(Disp_Value);
     }
   }
@@ -1130,8 +1175,10 @@ export default function PostProcess() {
     tabS = document.getElementById('simple-tab-2').tabIndex;
     elementstring = document.getElementById('Id_Elemstring').value;
     methodid = document.getElementById('Id_Nodenum').checked;
+    setGMData("Node")
     if (methodid === false) {
       graphmethod = "NodeCCoord";
+      setGMData("Node x Coordinate")
     }
     Extractelement(elementstring);
     if (tabD === 0 && tabF === -1 && tabS === -1) {
@@ -1158,6 +1205,7 @@ export default function PostProcess() {
         Force.Fyz = document.getElementById('Id_Fyz').checked;
       }
       else {
+        Force.M=true
         Force.Mx = document.getElementById('Id_Mx').checked;
         Force.My = document.getElementById('Id_My').checked;
         Force.Mz = document.getElementById('Id_Mz').checked;
@@ -1177,6 +1225,7 @@ export default function PostProcess() {
 
       }
       else {
+        Stress.CS=true;
         Stress.Maximum = document.getElementById('Id_Max').checked;
         Stress.C1 = document.getElementById('Id_C1').checked;
         Stress.C2 = document.getElementById('Id_C2').checked;
@@ -1196,22 +1245,23 @@ export default function PostProcess() {
   
       for (let i = 0; i < element.length; i++) {
         const elemdt = await getelem(element[i]);
-        tempjson.data.push({'x': elemdt[element[i]].NODE[1],'y':0});
-        tempjson.data.push({'x': elemdt[element[i]].NODE[0],'y':0}); 
-        Nodeidcollection.push(elemdt[element[i]].NODE[1]);
+        tempjson.data.push({'x': elemdt[element[i]].NODE[0],'y':0});
+        tempjson.data.push({'x': elemdt[element[i]].NODE[1],'y':0}); 
         Nodeidcollection.push(elemdt[element[i]].NODE[0]);
+        Nodeidcollection.push(elemdt[element[i]].NODE[1]);
       }
       dt.push(tempjson);
     }
     else {
       for (let i = 0; i < element.length; i++) {
         const elemdt = await getelem(element[i]);
-        tempjson.data.push({'x': await getnodexcoord(elemdt[element[i]].NODE[1]),'y':0});
         tempjson.data.push({'x': await getnodexcoord(elemdt[element[i]].NODE[0]),'y':0});
-        Nodeidcollection.push(elemdt[element[i]].NODE[1]);
+        tempjson.data.push({'x': await getnodexcoord(elemdt[element[i]].NODE[1]),'y':0});
         Nodeidcollection.push(elemdt[element[i]].NODE[0]);
-        dt.push(tempjson);
+        Nodeidcollection.push(elemdt[element[i]].NODE[1]);
+      
       }
+      dt.push(tempjson);
     }
   }
 
@@ -1254,7 +1304,7 @@ export default function PostProcess() {
       <BoxComp>
         <Stack direction={"row"}>
           <Box sx={{ ml: 1, mt: 2, mr: 1, mb: 2, width: '45vw', height: '40vh', display: "flex", justifyContent: "center", flexDirection: "column", flexWrap: "wrap" }}>
-            <DataChart data={data} AnnotationDefaultData={Annotation} />
+            <DataChart data={data} AnnotationDefaultData={Annotation} GM={GM} />
             <Divider sx={{ my: 3 }} />
             <DiagramOpt />
           </Box>
@@ -1274,6 +1324,10 @@ export default function PostProcess() {
       <Box>
         <Button onClick={Storethedata} sx={{ ml: "10vw", marginTop: 3 }} variant='contained'> Refresh window</Button>
         <Button onClick={Updatethechart} sx={{ ml: 2, marginTop: 3 }} variant='contained'> Draw Graph</Button>
+        <SimpleDialog
+        selectedValue={selectedValue}
+        open={open}
+        />
       </Box>
     </React.Fragment>
   )

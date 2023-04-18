@@ -28,6 +28,7 @@ const get = async () => {
   }
 }
 
+var ab={};
 
 
 const LoadCombination = [
@@ -37,8 +38,16 @@ const LoadCombination = [
 ]
 
 export default function LoadCaseCombinationList(props) {
-
+  const [val,setcheckbox]=React.useState({});
   const [LoadCombList, setLoadCombList] = React.useState(LoadCombination);
+
+  // function checklist(val){
+  //   if(checkboxlist.includes(val))
+  //   setcheckbox(true);
+  //   else
+  //   setcheckbox(false);
+    
+  //   }
 
   React.useEffect(() => {
     const initAsync = async () => {
@@ -73,13 +82,19 @@ export default function LoadCaseCombinationList(props) {
   // }, [error]);
 
 const displayLoadcombination = event=>{
+
+  
+  //setcheckbox(!val);
   if (event.target.checked) {
     checkboxlist.push(event.target.value);
-    
+    //ab[event.target.value]=event.target.checked;
+    //setcheckbox(ab);
   }
    else {
    
-    var index = checkboxlist.indexOf(event.target.value); // Let's say it's Bob.
+    var index = checkboxlist.indexOf(event.target.value);// Let's say it's Bob.
+   // ab[event.target.value]=false ;
+   // setcheckbox(ab);
     delete checkboxlist[index];
   }
 };
@@ -107,7 +122,7 @@ const displayLoadcombination = event=>{
             return (
                 <Box key={"Box" + idx}>
                   <Typography sx={{float:"left", mt:1}}>{matlId}</Typography>
-                  <Checkbox key={idx} value={matlId} sx={{float:"right", ml:12}}  onClick={displayLoadcombination} />
+                  <Checkbox key={idx} value={matlId} sx={{float:"right", ml:12}}   onClick={displayLoadcombination} />
                 </Box>
               )
           })}
