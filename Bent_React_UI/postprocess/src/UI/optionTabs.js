@@ -173,14 +173,14 @@ export default function LabTabs(props) {
 
         >
           <FormControlLabel value="Force" control={<Radio id="Id_F" />} label="Force" />
-          <Box sx={{ml:4, mb:1, width:"100%"}}>
+          <Box sx={{ml:'4vh',  mb:1, width:"100%"}}>
             <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Fx" onChange={handleFX} checked={force[0]}/>} label="Fx" disabled={Forceradiovalue !== "Force" ? true : false}/>
             <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Fy" onChange={handleFY} checked={force[1]} />} label="Fy" disabled={Forceradiovalue !== "Force" ? true : false} />
             <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Fz" onChange={handleFZ} checked={force[2]} />} label="Fz" disabled={Forceradiovalue !== "Force" ? true : false} />
             <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Fyz" onChange={handleFYZ} checked={force[3]} />} label="Fyz" disabled={Forceradiovalue !== "Force" ? true : false} />
           </Box>
           <FormControlLabel value="Moment" control={<Radio id="Id_M" />} label="Moment" />
-          <Box sx={{ml:4, width:"100%"}}>
+          <Box sx={{ml:'4vh', width:"100%"}}>
             <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Mx" onChange={handleMX} checked={moment[0]} />} label="Mx" disabled={Forceradiovalue === "Force" ? true : false}/>
             <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_My" onChange={handleMY} checked={moment[1]} />} label="My" disabled={Forceradiovalue === "Force" ? true : false}/>
             <FormControlLabel sx={{width:"20%"}} control={<Checkbox id="Id_Mz" onChange={handleMZ} checked={moment[2]} />} label="Mz" disabled={Forceradiovalue === "Force" ? true : false} />
@@ -249,7 +249,7 @@ export default function LabTabs(props) {
     };
 
     return (
-      <FormControl sx={{width:"100%"}}>
+      <FormControl sx={{width:"100%", height:"1vw" ,mt:'-1vw'}}>
       <RadioGroup
         aria-labelledby="Stress-radio-buttons-group-label"
         defaultValue="Combined Stress"
@@ -258,7 +258,7 @@ export default function LabTabs(props) {
         value={Stressradiovalue}
       >
         <FormControlLabel value="Individual Stress" control={<Radio id="Id_Is" />} label="Individual Stress" />
-        <Box sx={{ml:4, mb:1, width:"100%"}}>
+        <Box sx={{ml:'4vw', mb:1, width:"100%"}}>
           <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Sax" onChange={handleSax} checked={Individualstress[0]} />} label="Sax" disabled={Stressradiovalue !== "Individual Stress" ? true : false}/>
           <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Ssy" onChange={handleSsy} checked={Individualstress[1]}/>} label="Ssy" disabled={Stressradiovalue !== "Individual Stress" ? true : false} />
           <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Ssz" onChange={handleSsz} checked={Individualstress[2]} />} label="Ssz" disabled={Stressradiovalue !== "Individual Stress" ? true : false} />
@@ -266,7 +266,7 @@ export default function LabTabs(props) {
           <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Sbz"  onChange={handleSbz} checked={Individualstress[4]}/>} label="Sbz" disabled={Stressradiovalue !== "Individual Stress" ? true : false} />
         </Box>
         <FormControlLabel value="Combined Stress" control={<Radio id="Id_CS" />} label="Combined Stress" />
-        <Box sx={{ml:4, width:"100%"}}>
+        <Box sx={{ml:'4vw', width:"100%"}}>
           <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Max" onChange={handlemax} checked={Cstress[0]} />} label="Maximum" disabled={Stressradiovalue === "Individual Stress" ? true : false} />
           <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_C1"  onChange={handleC1} checked={Cstress[1]}/>} label="1 (-y, +z)" disabled={Stressradiovalue === "Individual Stress" ? true : false} />
           <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_C2"  onChange={handleC2} checked={Cstress[2]} />} label="2 (+y, +z)" disabled={Stressradiovalue === "Individual Stress" ? true : false} />

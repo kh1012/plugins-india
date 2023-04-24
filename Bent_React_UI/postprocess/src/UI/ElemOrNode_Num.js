@@ -11,7 +11,7 @@ setelemvalue(event.target.value);
   return (
     <Box sx={{height:50}}>
       <Typography sx={{float:"left", mt:2.5}}>Elements or Nodes Number</Typography>
-      <TextField value={elemval} onChange={savevalue} id="Id_Elemstring" sx={{float:"right"}}  label="Standard" variant="standard" />
+      <TextField  value={elemval} onChange={savevalue} id="Id_Elemstring" sx={{mt:'0.5vw' ,float:"right"}}   variant="standard" />
     </Box>
   );
 }

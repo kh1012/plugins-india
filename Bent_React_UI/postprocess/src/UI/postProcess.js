@@ -68,8 +68,7 @@ let elementstring;
 let graphmethod = "NodeNum";
 let MAPI_Key = "eyJ1ciI6IlJhaHVsTWlkYXM5NiIsInBnIjoiY2l2aWwiLCJjbiI6IjAyMURtUWxZVHcifQ.305412b34074b366859d71986b0a4f9c9995eb24c1aa82ab02a73ff2a6fb5198";
 window.MAPI_Key = MAPI_Key;
-const dt = [
-];
+let dt = [];
 let tabD = false;
 let tabF = false;
 let tabS = false;
@@ -150,6 +149,7 @@ const changecoordinate = [
 
 
 export default function PostProcess() {
+  const [val,setvalue]=React.useState(true);
   const [Tabvalue, setTabValue] = React.useState('Displacement');
   const [open, setOpen] = React.useState(false);
   const [Checkboxitems, Setcheckbox] = React.useState([]);
@@ -167,7 +167,7 @@ export default function PostProcess() {
     setOpen(true);
   };
 
-  const [GM, setGMData] = React.useState("Node");
+  const [GM, setGMData] = React.useState("Node_Number");
   const [data, setData] = React.useState([]);
   const [Annotation, setAnnotation] = React.useState([]);
   const [windowSize, setWindowSize] = React.useState({
@@ -186,9 +186,27 @@ export default function PostProcess() {
 
   function Storethedata() {
     setData([]);
+    dt=[];
+    graphmethod = "NodeNum";
+    checkboxlist2=[];
+    SetDisplacement([false,false,false]);
+    SetADisplacement([false,false,false]);
+    SetForce([false,false,false,false,false]);
+    SetMoment([false,false,false,false,false]);
+    SetIS([false,false,false,false,false]);
+    SetCS([false,false,false,false,false]);
+    setvalue(true);
+    setRadioValue(['Displacement','Force','Individual Stress']);
+    setGMData("Node_Number");
   }
 
   async function reinitialise() {
+    setData([]);
+    graphmethod = "NodeNum";
+    dt=[];
+    setvalue(true);
+    setGMData("Node_Number");
+    checkboxlist2=[];
     Noderesult = {};
     Nodeidcollection = [];
     NodestringResult = [];
@@ -240,7 +258,7 @@ export default function PostProcess() {
 
 
   const handleClick = event => {
-    event.preventDefault();
+    reinitialise();
     Updatethechart(event);
 
   };
@@ -248,7 +266,7 @@ export default function PostProcess() {
   async function Updatethechart(event) {
 
     setOpen(true);
-    //  await reinitialise();
+    
     let Components;
     let Table_Type;
     let i = 0;
@@ -395,14 +413,17 @@ export default function PostProcess() {
     if (Displacement.DX) {
       dir = 0;
       SetDisplacement([true,false,false]);
+      SetADisplacement([false,false,false]);
     }
     else if (Displacement.DY) {
       dir = 1;
       SetDisplacement([false,true,false]);
+      SetADisplacement([false,false,false]);
     }
     else if (Displacement.DZ) {
       dir = 2;
       SetDisplacement([false,false,true]);
+      SetADisplacement([false,false,false]);
     }
 
     for (let z = 0; z < Noderesult[Nodeidcollection[0]].LComb.length; z++) {
@@ -456,14 +477,17 @@ export default function PostProcess() {
     if (Displacement.RX) {
       dir = 0;
       SetADisplacement([true,false,false]);
+      SetDisplacement([false,false,false]);
     }
     else if (Displacement.RY) {
       dir = 1;
       SetADisplacement([false,true,false]);
+      SetDisplacement([false,false,false]);
     }
     else if (Displacement.RZ) {
       dir = 2;
       SetADisplacement([false,false,true]);
+      SetDisplacement([false,false,false]);
     }
 
     for (let z = 0; z < Noderesult[Nodeidcollection[0]].LComb.length; z++) {
@@ -567,14 +591,17 @@ export default function PostProcess() {
     if (Force.FX) {
       dir = 0;
       SetForce([true,false,false,false]);
+      SetMoment([false,false,false,false]);
     }
     else if (Force.FY) {
       dir = 1;
       SetForce([false,true,false,false]);
+      SetMoment([false,false,false,false]);
     }
     else if (Force.FZ) {
       dir = 2;
       SetForce([false,false,true,false]);
+      SetMoment([false,false,false,false]);
     }
 
     const uniqueNames = Array.from(new Set(forceusedLC));
@@ -622,14 +649,17 @@ export default function PostProcess() {
     if (Force.Mx) {
       dir = 0;
       SetMoment([true,false,false,false]);
+      SetForce([false,false,false,false]);
     }
     else if (Force.My) {
       dir = 1;
       SetMoment([false,true,false,false]);
+      SetForce([false,false,false,false]);
     }
     else if (Force.Mz) {
       dir = 2;
       SetMoment([false,false,true,false]);
+      SetForce([false,false,false,false]);
     }
 
     const uniqueNames = Array.from(new Set(forceusedLC));
@@ -678,22 +708,27 @@ export default function PostProcess() {
     if (Stress.Sax) {
       dir = 0;
       SetIS([true,false,false,false,false]);
+      SetCS([false,false,false,false,false]);
     }
     else if (Stress.Ssy) {
       dir = 1;
       SetIS([false,true,false,false,false]);
+      SetCS([false,false,false,false,false]);
     }
     else if (Stress.Ssz) {
       dir = 2;
       SetIS([false,false,true,false,false]);
+      SetCS([false,false,false,false,false]);
     }
     else if (Stress.Sby) {
       dir = 3; dir2 = 4;
       SetIS([false,false,false,true,false]);
+      SetCS([false,false,false,false,false]);
     }
     else if (Stress.Sbz) {
       dir = 5; dir2 = 6;
       SetIS([false,false,false,false,true]);
+      SetCS([false,false,false,false,false]);
     }
 
     const uniqueNames = Array.from(new Set(StressusedLC));
@@ -712,22 +747,27 @@ export default function PostProcess() {
     if (Stress.Maximum) {
       dir = 0;
       SetCS([true,false,false,false,false]);
+      SetIS([false,false,false,false,false]);
     }
     else if (Stress.C1) {
       dir = 1;
       SetCS([false,true,false,false,false]);
+      SetIS([false,false,false,false,false]);
     }
     else if (Stress.C2) {
       dir = 2;
       SetCS([false,false,true,false,false]);
+      SetIS([false,false,false,false,false]);
     }
     else if (Stress.C3) {
       dir = 3;
       SetCS([false,false,false,true,false]);
+      SetIS([false,false,false,false,false]);
     }
     else if (Stress.C4) {
       dir = 4;
       SetCS([false,false,false,false,true]);
+      SetIS([false,false,false,false,false]);
     }
 
     const uniqueNames = Array.from(new Set(StressusedLC));
@@ -982,6 +1022,7 @@ export default function PostProcess() {
   }
 
   async function getdisplacement(res) {
+  
     let N = Nodeidcollection.length * checkboxlist2.length;
     for (let k = 0; k < N; k++) {
       let Disp_Value = {
@@ -1160,10 +1201,11 @@ export default function PostProcess() {
     elementstring = document.getElementById('Id_Elemstring').value;
     setelemvalue(String(elementstring));
     methodid = document.getElementById('Id_Nodenum').checked;
-    setGMData("Node");
+    setGMData("Node_Number");
     if (methodid === false) {
       graphmethod = "NodeCCoord";
-      setGMData("Node x Coordinate");
+      setvalue(false);
+      setGMData("Node_X-Coordinations");
     }
     Extractelement(elementstring);
     if (tabD === 0 && tabF === -1 && tabS === -1) {
@@ -1319,14 +1361,16 @@ export default function PostProcess() {
           <Box sx={{ ml: 1, mt: 2, mr: 1, mb: 2, width: '45vw', height: '40vh', display: "flex", justifyContent: "center", flexDirection: "column", flexWrap: "wrap" }}>
             <DataChart data={data} AnnotationDefaultData={Annotation} GM={GM} />
             <Divider sx={{ my: 3 }} />
-            <DiagramOpt />
+            <DiagramOpt DV={GM} checkedRv={val} />
           </Box>
           <Box sx={{ p: 5, mt: 2, ml: 1, mr: 1, mb: 2, width: window.innerWidth * 0.25, background: "#FFFFFF" }}>
             <Units />
             <Divider sx={{ p: 1 }} />
             <ElemOrNodeNum Dvalue={elemval} />
             <Divider sx={{ p: 1 }} />
+            <Box>
             <OptionTabs Radioval={v_radiovalue} Tabvalue={Tabvalue} displacement={v_displacement} force={v_force} moment={v_moment} Individualstress={v_individualstress} Cstress={v_cstress} Angulardisplacement={v_angulardisplacement} />
+            </Box>
           </Box>
           <Box sx={{ mt: 2, mb: 2, ml: 1, width: '20vw', background: "#FFFFFF" }}>
             <LoadCaseCombinationList chkbox={Checkboxitems} width={window.innerWidth * 0.2} />

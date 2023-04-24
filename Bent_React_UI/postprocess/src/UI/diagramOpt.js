@@ -8,7 +8,9 @@ import Checkbox from '@mui/material/Checkbox';
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 
-export default function DiagramOpt() {
+
+export default function DiagramOpt(props) {
+  const [val,setvalue]=React.useState(props.checkedRv);
   return (
     <Box sx={{background:"#FFFFFF", height:50, position:"relative", ml:'-45vw', mt:'51vh'}} >
       <FormControl>
@@ -17,10 +19,10 @@ export default function DiagramOpt() {
           <RadioGroup
             row
             aria-labelledby="demo-row-radio-buttons-group-label"
-            defaultValue="Node_Number"
+            defaultValue={props.DV}
             name="deno-diagram-options"
           >
-            <FormControlLabel value="Node_Number" control={<Radio id="Id_Nodenum" />} label="Node Number"/>
+            <FormControlLabel value="Node_Number" control={<Radio defaultChecked={val} id="Id_Nodenum" />} label="Node Number"/>
             <FormControlLabel value="Node_X-Coordinations" control={<Radio />} label="Node X-Coordinations" />
           </RadioGroup>
           <FormControlLabel control={<Checkbox defaultChecked />} label="Show Legend" />
