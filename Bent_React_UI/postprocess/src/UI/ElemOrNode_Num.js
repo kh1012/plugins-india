@@ -3,8 +3,8 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-export default function ElemOrNodeNum() {
-  const [elemval,setelemvalue]=React.useState("1to3");
+export default function ElemOrNodeNum(props) {
+  const [elemval,setelemvalue]=React.useState(props.Dvalue);
   function savevalue(event){
 setelemvalue(event.target.value);
   }

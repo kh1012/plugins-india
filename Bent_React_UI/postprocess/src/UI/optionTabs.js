@@ -19,18 +19,18 @@ function a11yProps(index) {
   };
 }
 
-export default function LabTabs() {
-  const [value, setValue] = React.useState('Displacement');
+export default function LabTabs(props) {
+  const [value, setValue] = React.useState(props.Tabvalue);
   const [DisChecked, SetDisChecked] = React.useState([false, false, false]);
-  const [displacement, SetDisplacement] = React.useState([false,false,false]);
-  const [force, SetForce] = React.useState([false,false,false,false]);
-  const [moment, SetMoment] = React.useState([false,false,false,false]);
-  const [Individualstress, SetIS] = React.useState([false,false,false,false,false]);
-  const [Cstress, SetCS] = React.useState([false,false,false,false,false]);
-  const [Angulardisplacement, SetADisplacement] = React.useState([false,false,false]);
-  const [displacementradiovalue,SetDRB]=React.useState('Displacement');
-  const [Forceradiovalue,SetFMRB]=React.useState('Force');
-  const [Stressradiovalue,SetSRB]=React.useState('Individual Stress');
+  const [displacement, SetDisplacement] = React.useState(props.displacement);
+  const [force, SetForce] = React.useState(props.force);
+  const [moment, SetMoment] = React.useState(props.moment);
+  const [Individualstress, SetIS] = React.useState(props.Individualstress);
+  const [Cstress, SetCS] = React.useState(props.Cstress);
+  const [Angulardisplacement, SetADisplacement] = React.useState(props.Angulardisplacement);
+  const [displacementradiovalue,SetDRB]=React.useState(props.Radioval[0]);
+  const [Forceradiovalue,SetFMRB]=React.useState(props.Radioval[1]);
+  const [Stressradiovalue,SetSRB]=React.useState(props.Radioval[2]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -112,9 +112,9 @@ export default function LabTabs() {
           </Box>
           <FormControlLabel value="Angular displacement" control={<Radio id="Id_AD"/>} label="Angular displacement" />
           <Box sx={{ml:4, width:"100%"}}>
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox  id="Id_RX" />} onChange={handleRX}  checked={Angulardisplacement[0]} label="RX" disabled={displacementradiovalue === "Displacement" ? true : false}  />
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_RY" />} onChange={handleRY} checked={Angulardisplacement[1]} label="RY" disabled={displacementradiovalue === "Displacement" ? true : false} />
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox  id="Id_RZ"/>} onChange={handleRZ}  checked={Angulardisplacement[2]} label="RZ" disabled={displacementradiovalue === "Displacement" ? true : false} />
+            <FormControlLabel sx={{width:"30%"}} control={<Checkbox  id="Id_RX" onChange={handleRX}  checked={Angulardisplacement[0]} />}  label="RX" disabled={displacementradiovalue === "Displacement" ? true : false}  />
+            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_RY" onChange={handleRY} checked={Angulardisplacement[1]} />}  label="RY" disabled={displacementradiovalue === "Displacement" ? true : false} />
+            <FormControlLabel sx={{width:"30%"}} control={<Checkbox  id="Id_RZ" onChange={handleRZ}  checked={Angulardisplacement[2]}/>}  label="RZ" disabled={displacementradiovalue === "Displacement" ? true : false} />
           </Box>
         </RadioGroup>
       </FormControl>

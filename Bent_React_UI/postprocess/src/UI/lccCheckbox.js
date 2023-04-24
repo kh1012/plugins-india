@@ -32,9 +32,7 @@ var ab={};
 
 
 const LoadCombination = [
-  {"LC1": 10},
-  {"LC2": 20},
-  {"LC3": 30},
+ 
 ]
 
 export default function LoadCaseCombinationList(props) {
@@ -62,7 +60,20 @@ export default function LoadCaseCombinationList(props) {
         for ( let idx = 0; idx < keys.length; idx++ ) {
           const matlId = keys[idx];
           const TempObj = {};
-          TempObj[matlId] = matlData[matlId].NAME+"(CBC)";
+          if(props.chkbox!==undefined){
+            if(props.chkbox.includes(matlData[matlId].NAME+"(CBC)")){
+              TempObj[matlId] = [matlData[matlId].NAME+"(CBC)",true];
+            }
+            else{
+              TempObj[matlId] = [matlData[matlId].NAME+"(CBC)",false];  
+            }
+           
+         
+          }
+          else{
+            TempObj[matlId] = [matlData[matlId].NAME+"(CBC)",false];  
+          }
+        
           temp.push(TempObj)
         }
         setLoadCombList(temp);
@@ -71,7 +82,7 @@ export default function LoadCaseCombinationList(props) {
 
     //Async, Sync
     initAsync();
-  }, []);
+  }, [LoadCombList]);
 
   // const fieldRef = React.useRef<HTMLInputElement>(null);
   // React.useEffect(() => {
@@ -116,13 +127,14 @@ const displayLoadcombination = event=>{
                 }}>
           {LoadCombList.map((value, idx) => {
             // const matlId = Object.keys(value)[0];
-            const matlId = value[idx+1];
+            const matlId = value[idx+1][0];
+            const checkedstatus= value[idx+1][1];
             const matlInfo = value;
             {/* <DataGrid> */}
             return (
                 <Box key={"Box" + idx}>
                   <Typography sx={{float:"left", mt:1}}>{matlId}</Typography>
-                  <Checkbox key={idx} value={matlId} sx={{float:"right", ml:12}}   onClick={displayLoadcombination} />
+                  <Checkbox  key={idx} defaultChecked={checkedstatus} value={matlId} sx={{float:"right", ml:12}}   onClick={displayLoadcombination} />
                 </Box>
               )
           })}
