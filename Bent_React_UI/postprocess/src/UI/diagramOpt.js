@@ -11,11 +11,12 @@ import Stack from "@mui/material/Stack";
 
 export default function DiagramOpt(props) {
   const [val,setvalue]=React.useState(props.checkedRv);
+  
   return (
-    <Box sx={{background:"#FFFFFF", height:50, position:"relative", ml:'-45vw', mt:'51vh'}} >
-      <FormControl>
+    <Box sx={{background:"#FFFFFF", width:"100%", height:50, display:"flex", alignItems:"center", overflow:"hidden", overflowY:"scroll"}} >
+      <FormControl >
         <Stack direction={"row"}>
-          <FormLabel id="demo-row-radio-buttons-group-label" sx={{mr:5, mt:1, ml:2}}>Diagram options</FormLabel>
+          <FormLabel id="demo-row-radio-buttons-group-label" sx={{ display:"flex", alignItems:"center", ml:2, mr:2}}>Diagram options</FormLabel>
           <RadioGroup
             row
             aria-labelledby="demo-row-radio-buttons-group-label"
@@ -26,7 +27,6 @@ export default function DiagramOpt(props) {
             <FormControlLabel value="Node_X-Coordinations" control={<Radio />} label="Node X-Coordinations" />
           </RadioGroup>
           <FormControlLabel control={<Checkbox defaultChecked />} label="Show Legend" />
-
         </Stack>
       </FormControl>
       <Box sx={{float:"right"}}>

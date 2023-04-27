@@ -41,7 +41,7 @@ const top100Films = [
   { title: 'KN', year: 1972 },
 ];
 
-export default function Units () {
+export default function Units (props) {
   const [sect, setSect] = React.useState('');
   const defaultProps = {
     options: top100Films,
@@ -79,29 +79,37 @@ export default function Units () {
     }, []);
 
 
+  const FormWidth = props.width;
+
   return (
     <Box>
       <Typography>Units</Typography>
         <Stack>
-          <Box sx={{ mt:1}}>
+          <Box sx={{ml:2, mt:1}}>
             <Typography sx={{float:"left", mt:2.5}}>Force</Typography>
-            <FormControl  sx={{float:"right"}} variant="standard">
-              <Select id="Id_Force" sx={{float:"right" ,width:'15vw',height:'3vh',mt:'1vh' , textAlign:'center',border:'none'}} onChange={handleChange} defaultValue={10} >
+            <FormControl  sx={{float:"right", width:FormWidth*0.4}} variant="standard">
+              <Select id="Id_Force" sx={{float:"right", height:'3vh', mt:'1vh', textAlign:'center'}} onChange={handleChange} >
                 {unitList.map((value, idx) => {
                   if(value["1"] !== undefined){
                     return <MenuItem key={idx} value={10}>{value['1']['FORCE']}</MenuItem>
+                  }
+                  else {
+                    return <></>
                   }
                 })}
               </Select>
             </FormControl>
           </Box>
-          <Box sx={{mT:2}}>
+          <Box sx={{ml:2}}>
             <Typography sx={{float:"left", mt:2.5}}>Length</Typography>
-            <FormControl  sx={{float:"right"}} variant="standard">
-              <Select id="Id_Length" sx={{float:"right" ,width:'15vw',height:'3vh',mt:'1vh' , textAlign:'center'}} onChange={handleChange} defaultValue={10} >
+            <FormControl  sx={{float:"right", width:FormWidth*0.4}} variant="standard">
+              <Select id="Id_Length" sx={{float:"right", height:'3vh', mt:'1vh', textAlign:'center'}} onChange={handleChange} >
                 {unitList.map((value, idx) => {
                   if(value["1"] !== undefined){
                     return <MenuItem key={idx} value={10}>{value['1']['DIST']}</MenuItem>
+                  }
+                  else {
+                    return <></>
                   }
                 })}
               </Select>

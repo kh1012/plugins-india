@@ -36,9 +36,10 @@ const LoadCombination = [
 ]
 
 export default function LoadCaseCombinationList(props) {
-  const [val,setcheckbox]=React.useState({});
+  const [val,setcheckbox] = React.useState({});
   const [LoadCombList, setLoadCombList] = React.useState(LoadCombination);
-
+  const ListWidth = props.width;
+  const ListHeight = props.height;
   // function checklist(val){
   //   if(checkboxlist.includes(val))
   //   setcheckbox(true);
@@ -60,7 +61,7 @@ export default function LoadCaseCombinationList(props) {
         for ( let idx = 0; idx < keys.length; idx++ ) {
           const matlId = keys[idx];
           const TempObj = {};
-          if(props.chkbox!==undefined){
+          if(props.chkbox !== undefined) {
             if(props.chkbox.includes(matlData[matlId].NAME+"(CBC)")){
               TempObj[matlId] = [matlData[matlId].NAME+"(CBC)",true];
             }
@@ -92,38 +93,35 @@ export default function LoadCaseCombinationList(props) {
   //   }
   // }, [error]);
 
-const displayLoadcombination = event=>{
-
-  
-  //setcheckbox(!val);
-  if (event.target.checked) {
-    checkboxlist.push(event.target.value);
-    //ab[event.target.value]=event.target.checked;
-    //setcheckbox(ab);
-  }
-   else {
-   
-    var index = checkboxlist.indexOf(event.target.value);// Let's say it's Bob.
-   // ab[event.target.value]=false ;
-   // setcheckbox(ab);
-    delete checkboxlist[index];
-  }
-};
+  const displayLoadcombination = event=>{
+    //setcheckbox(!val);
+    if (event.target.checked) {
+      checkboxlist.push(event.target.value);
+      //ab[event.target.value]=event.target.checked;
+      //setcheckbox(ab);
+    }
+    else {
+      var index = checkboxlist.indexOf(event.target.value);// Let's say it's Bob.
+    // ab[event.target.value]=false ;
+    // setcheckbox(ab);
+      delete checkboxlist[index];
+    }
+  };
 
 
 
   return (
-    <Box sx={{height:600, p:1, display:"flex", justifyContent:"center"}}>
+    <Box sx={{width:ListWidth, height:ListHeight, display:"flex", justifyContent:"center", mt:2}}>
       <Stack>
       <Typography sx={{mb:1, ml:1}}>Load Case and Combinations</Typography>
-      <Box sx={{ height:500, width:props.width*0.8, border:1, p:1 }}>
+      <Box sx={{ height:ListHeight*0.9, width:ListWidth*0.8, border:1, p:1 }}>
         <Box sx={{display:"flex",
                   flexDirection: "column", 
                   overflow: "hidden",
                   overflowY: "scroll",
-                  height:480,
+                  height:ListHeight*0.85,
                   width:props.width*0.75,
-                  ml:2, mt:1
+                  ml:2, mt:2
                 }}>
           {LoadCombList.map((value, idx) => {
             // const matlId = Object.keys(value)[0];
@@ -134,10 +132,11 @@ const displayLoadcombination = event=>{
             return (
                 <Box key={"Box" + idx}>
                   <Typography sx={{float:"left", mt:1}}>{matlId}</Typography>
-                  <Checkbox  key={idx} defaultChecked={checkedstatus} value={matlId} sx={{float:"right", ml:12}}   onClick={displayLoadcombination} />
+                  <Checkbox key={idx} defaultChecked={checkedstatus} value={matlId} sx={{float:"right"}} onClick={displayLoadcombination} />
                 </Box>
               )
-          })}
+            }
+          )}
           {/* </DataGrid> */}
         </Box>
       </Box>

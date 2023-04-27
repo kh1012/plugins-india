@@ -19,7 +19,7 @@ export default function MyResponsiveLine (props){
   return(
     <ResponsiveLine
       data={props.data}
-      margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+      margin={{ top: 50, right: 110, bottom: 80, left: 50 }}
       xScale={{ type: 'linear' , min: 'auto', max: 'auto'}}
       xFormat=" >-.2f"
       yScale={{
@@ -72,7 +72,6 @@ export default function MyResponsiveLine (props){
       
       legends={[
           {
-            
               anchor: 'bottom-right',
               direction: 'column',
               justify: false,

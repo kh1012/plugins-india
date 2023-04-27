@@ -32,6 +32,7 @@ export default function LabTabs(props) {
   const [Forceradiovalue,SetFMRB]=React.useState(props.Radioval[1]);
   const [Stressradiovalue,SetSRB]=React.useState(props.Radioval[2]);
 
+  const TabWidth = props.width;
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -41,8 +42,6 @@ export default function LabTabs(props) {
   }
 
   function DisplacementCompo (props){
-   
-    
     const [radioValue, setRadioValue] = React.useState();
 
     function handleDX(event){
@@ -76,8 +75,6 @@ export default function LabTabs(props) {
       SetDisplacement([false,false,false]);
     }
 
-
-
     const handleRadioChange = (event) => {
       SetDRB(event.target.value);
     };
@@ -97,24 +94,28 @@ export default function LabTabs(props) {
     // });
 
     return (
-      <FormControl sx={{width:"100%"}}>
+      <FormControl sx={{width:"100%", height:"100%"}}>
         <RadioGroup
           aria-labelledby="displacement-radio-buttons-group-label"
           name="displacement-radio-buttons-group"
           onChange={handleRadioChange}
           value={displacementradiovalue}
         >
-          <FormControlLabel value="Displacement" control={<Radio id="Id_D" />} label="Displacement" />
-          <Box sx={{ml:4, mb:1, width:"100%"}}>
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DX" onChange={handleDX} checked={displacement[0]}/>} label="DX" disabled={displacementradiovalue !== "Displacement" ? true : false} />
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DY" onChange={handleDY} checked={displacement[1]}/>} label="DY" disabled={displacementradiovalue !== "Displacement" ? true : false} />
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DZ" onChange={handleDZ} checked={displacement[2]}/>} label="DZ" disabled={displacementradiovalue !== "Displacement" ? true : false} />
+          <Box sx={{height:"50%"}}>
+            <FormControlLabel value="Displacement" control={<Radio id="Id_D" />} label="Displacement" />
+            <Box sx={{ml:4, mb:1, width:"100%"}}>
+              <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DX" onChange={handleDX} checked={displacement[0]}/>} label="DX" disabled={displacementradiovalue !== "Displacement" ? true : false} />
+              <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DY" onChange={handleDY} checked={displacement[1]}/>} label="DY" disabled={displacementradiovalue !== "Displacement" ? true : false} />
+              <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_DZ" onChange={handleDZ} checked={displacement[2]}/>} label="DZ" disabled={displacementradiovalue !== "Displacement" ? true : false} />
+            </Box>
           </Box>
-          <FormControlLabel value="Angular displacement" control={<Radio id="Id_AD"/>} label="Angular displacement" />
-          <Box sx={{ml:4, width:"100%"}}>
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox  id="Id_RX" onChange={handleRX}  checked={Angulardisplacement[0]} />}  label="RX" disabled={displacementradiovalue === "Displacement" ? true : false}  />
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_RY" onChange={handleRY} checked={Angulardisplacement[1]} />}  label="RY" disabled={displacementradiovalue === "Displacement" ? true : false} />
-            <FormControlLabel sx={{width:"30%"}} control={<Checkbox  id="Id_RZ" onChange={handleRZ}  checked={Angulardisplacement[2]}/>}  label="RZ" disabled={displacementradiovalue === "Displacement" ? true : false} />
+          <Box sx={{height:"50%"}}>
+            <FormControlLabel value="Angular displacement" control={<Radio id="Id_AD"/>} label="Angular displacement" />
+            <Box sx={{ml:4, width:"100%"}}>
+              <FormControlLabel sx={{width:"30%"}} control={<Checkbox  id="Id_RX" onChange={handleRX}  checked={Angulardisplacement[0]} />}  label="RX" disabled={displacementradiovalue === "Displacement" ? true : false}  />
+              <FormControlLabel sx={{width:"30%"}} control={<Checkbox id="Id_RY" onChange={handleRY} checked={Angulardisplacement[1]} />}  label="RY" disabled={displacementradiovalue === "Displacement" ? true : false} />
+              <FormControlLabel sx={{width:"30%"}} control={<Checkbox  id="Id_RZ" onChange={handleRZ}  checked={Angulardisplacement[2]}/>}  label="RZ" disabled={displacementradiovalue === "Displacement" ? true : false} />
+            </Box>
           </Box>
         </RadioGroup>
       </FormControl>
@@ -259,7 +260,7 @@ export default function LabTabs(props) {
       >
         <FormControlLabel value="Individual Stress" control={<Radio id="Id_Is" />} label="Individual Stress" />
         <Box sx={{ml:'4vw', mb:1, width:"100%"}}>
-          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Sax" onChange={handleSax} checked={Individualstress[0]} />} label="Sax" disabled={Stressradiovalue !== "Individual Stress" ? true : false}/>
+          <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Sax" onChange={handleSax} checked={Individualstress[0]} />} label="Sax" disabled={Stressradiovalue !== "Individual Stress" ? true : false} />
           <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Ssy" onChange={handleSsy} checked={Individualstress[1]}/>} label="Ssy" disabled={Stressradiovalue !== "Individual Stress" ? true : false} />
           <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Ssz" onChange={handleSsz} checked={Individualstress[2]} />} label="Ssz" disabled={Stressradiovalue !== "Individual Stress" ? true : false} />
           <FormControlLabel sx={{width:"25%"}} control={<Checkbox id="Id_Sby" onChange={handleSby} checked={Individualstress[3]} />} label="Sby" disabled={Stressradiovalue !== "Individual Stress" ? true : false} />
@@ -279,13 +280,13 @@ export default function LabTabs(props) {
   }
 
   return (
-    <Box sx={{ width: '100%', typography: 'body1' }}>
-      <TabContext    value={value}>
+    <Box sx={{ width:TabWidth, typography: 'body1' }}>
+      <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label="lab API tabs example" centered>
-            <Tab {...a11yProps(0)} selected={value==="Displacement"}  sx={{width:"33%"}} label="Displacement" value="Displacement"  />
-            <Tab {...a11yProps(1)}  selected={value==="Force/Moment"}  sx={{width:"33%"}} label="Force/Moment" value="Force/Moment"  />
-            <Tab {...a11yProps(2)} selected={value==="Stress"}  sx={{width:"33%"}} label="Stress" value="Stress"  />
+            <Tab {...a11yProps(0)} selected={value === "Displacement"} sx={{width:"33%"}} label="Displacement" value="Displacement" />
+            <Tab {...a11yProps(1)} selected={value === "Force/Moment"} sx={{width:"33%"}} label="Force/Moment" value="Force/Moment" />
+            <Tab {...a11yProps(2)} selected={value === "Stress"} sx={{width:"33%"}} label="Stress" value="Stress" />
           </Tabs>
         </Box>
         <TabPanel value="Displacement">

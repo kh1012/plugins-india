@@ -24,8 +24,9 @@ import { getLCP } from 'web-vitals';
 
 function SimpleDialog(props) {
   const { onClose, selectedValue, open } = props;
- 
 
+  // The code below doesn't work.
+  // While drawing on the chart, if I click outside the dialog, an error message appears about "handleClose".
   const handleClose = () => {
     onClose(selectedValue);
   };
@@ -40,9 +41,9 @@ function SimpleDialog(props) {
 }
 
 SimpleDialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired, // There is no props value about "onClose".
   open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
+  selectedValue: PropTypes.string.isRequired, // There is no props value about "selectedValue".
 };
 
 //
@@ -66,7 +67,7 @@ let StressusedLC = [];
 let element = [];
 let elementstring;
 let graphmethod = "NodeNum";
-let MAPI_Key = "eyJ1ciI6IlJhaHVsTWlkYXM5NiIsInBnIjoiY2l2aWwiLCJjbiI6IjAyMURtUWxZVHcifQ.305412b34074b366859d71986b0a4f9c9995eb24c1aa82ab02a73ff2a6fb5198";
+let MAPI_Key = "eyJ1ciI6ImtqYjA5MTMiLCJwZyI6ImNpdmlsIiwiY24iOiJKa21ENV9kWFJBIn0.4f6bec4d8dd4c9d2c7c0cc1947bcebb5f0faa6b5cb88e3140a56c194c3762e74";
 window.MAPI_Key = MAPI_Key;
 let dt = [];
 let tabD = false;
@@ -171,16 +172,31 @@ export default function PostProcess() {
   const [data, setData] = React.useState([]);
   const [Annotation, setAnnotation] = React.useState([]);
   const [windowSize, setWindowSize] = React.useState({
-    // width: window.innerWidth,
-    // height: window.innerHeight
+    width: window.innerWidth,
+    height: window.innerHeight
   });
 
+  const handleResize = () => {
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight
+    });
+  }
+
+  React.useEffect(()=>{
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    }
+  }, []);
+
   const BoxComp = styled(Box)({
-    width: windowSize.width,
-    height: 600,
+    width:"100%",
+    height: windowSize.height*0.56,
     border: 1,
     backgroundColor: "#F5F4FF",
-    display: "flex", justifyContent: "center"
+    display: "flex",
+    justifyContent: "center",
   })
 
 
@@ -960,8 +976,6 @@ export default function PostProcess() {
     // console.log(obj);
   }
 
-
-
   async function getresulttable(Table_Type, Components) {
     const response = await fetch(`${baseUrl}/${programType}/post/table`, {
       method: "POST",
@@ -969,7 +983,7 @@ export default function PostProcess() {
         'Content-Type': 'application/json',
         'MAPI-Key': window.MAPI_Key
       },
-      body: JSON.stringify(({
+      body: JSON.stringify({
         "Argument": {
           "TABLE_NAME": "example",
           "TABLE_TYPE": Table_Type,
@@ -979,16 +993,11 @@ export default function PostProcess() {
           "LOAD_CASE_NAMES": checkboxlist2,
           "COMPONENTS": Components
         }
-      }
-
-      ))
-
+      })
     });
 
     let res = await response.json();
-
     return res;
-
   }
 
   async function getresulttableBeam(Table_Type, Components, Parts) {
@@ -998,7 +1007,7 @@ export default function PostProcess() {
         'Content-Type': 'application/json',
         'MAPI-Key': window.MAPI_Key
       },
-      body: JSON.stringify(({
+      body: JSON.stringify({
         "Argument": {
           "TABLE_NAME": "example",
           "TABLE_TYPE": Table_Type,
@@ -1009,20 +1018,14 @@ export default function PostProcess() {
           "PARTS": Parts,
           "COMPONENTS": Components
         }
-      }
-
-      ))
-
+      })
     });
 
     let res = await response.json();
-
     return res;
-
   }
 
   async function getdisplacement(res) {
-  
     let N = Nodeidcollection.length * checkboxlist2.length;
     for (let k = 0; k < N; k++) {
       let Disp_Value = {
@@ -1050,7 +1053,6 @@ export default function PostProcess() {
       supportnode.push(res.example.DATA[i][1]);
     }
 
-
     let z = 0;
     for (let k = 0; k < checkboxlist2.length; k++) {
 
@@ -1068,7 +1070,6 @@ export default function PostProcess() {
           Disp_Value.F = [0, 0, 0];
           Disp_Value.M = [0, 0, 0];
           Forcevalues.push(Disp_Value);
-
         }
         else {
           Disp_Value.NodeID = res.example.DATA[z][1];
@@ -1078,18 +1079,14 @@ export default function PostProcess() {
           Forcevalues.push(Disp_Value);
           z = z + 1;
         }
-
       }
     }
   }
 
   async function getForcesalternative(res) {
-
-
     for (let k = 0; k < res['example'].DATA.length; k++) {
       Forcevalues[res['example'].DATA[k][2]] = {};
     }
-
 
     //let j=0;
     let k = 0;
@@ -1105,7 +1102,6 @@ export default function PostProcess() {
 
       Disp_Value.ElementID = res['example'].DATA[k][1];
 
-
       //for(let i=0;i<res['example'].data.length;i++){
 
       Disp_Value.LComb = res['example'].DATA[k][2];
@@ -1115,7 +1111,6 @@ export default function PostProcess() {
       Disp_Value.Part["J"]["M"] = [res['example'].DATA[k + 1][7], res['example'].DATA[k + 1][8], res['example'].DATA[k + 1][9]];
 
       forceusedLC.push(Disp_Value.LComb);
-
       //}
       Forcevalues[Disp_Value.LComb][Disp_Value.ElementID] = Disp_Value;
       k = k + 2;
@@ -1123,12 +1118,10 @@ export default function PostProcess() {
     console.log(Forcevalues);
   }
 
-
   async function getStress(res) {
     for (let k = 0; k < res['example'].DATA.length; k++) {
       Stressvalues[res['example'].DATA[k][2]] = {};
     }
-
 
     //let j=0;
     let k = 0;
@@ -1358,22 +1351,23 @@ export default function PostProcess() {
       <Header />
       <BoxComp>
         <Stack direction={"row"}>
-          <Box sx={{ ml: 1, mt: 2, mr: 1, mb: 2, width: '45vw', height: '40vh', display: "flex", justifyContent: "center", flexDirection: "column", flexWrap: "wrap" }}>
-            <DataChart data={data} AnnotationDefaultData={Annotation} GM={GM} />
-            <Divider sx={{ my: 3 }} />
-            <DiagramOpt DV={GM} checkedRv={val} />
-          </Box>
-          <Box sx={{ p: 5, mt: 2, ml: 1, mr: 1, mb: 2, width: window.innerWidth * 0.25, background: "#FFFFFF" }}>
-            <Units />
+          <Stack sx={{mr:5, width:windowSize.width*0.45}}>
+            <Box sx={{height:windowSize.height*0.5}}>
+              <DataChart data={data} AnnotationDefaultData={Annotation} GM={GM} />
+              <DiagramOpt DV={GM} checkedRv={val} />
+            </Box>
+          </Stack>
+          <Box sx={{ p: 5, mt: 2, ml: 1, mr: 1, mb: 2, width:windowSize.width * 0.25, background: "#FFFFFF", overflow:"hidden", overflowY:"scroll" }}>
+            <Units width={windowSize.width * 0.25}/>
             <Divider sx={{ p: 1 }} />
-            <ElemOrNodeNum Dvalue={elemval} />
+            <ElemOrNodeNum Dvalue={elemval} width={windowSize.width * 0.25}/>
             <Divider sx={{ p: 1 }} />
             <Box>
-            <OptionTabs Radioval={v_radiovalue} Tabvalue={Tabvalue} displacement={v_displacement} force={v_force} moment={v_moment} Individualstress={v_individualstress} Cstress={v_cstress} Angulardisplacement={v_angulardisplacement} />
+            <OptionTabs Radioval={v_radiovalue} Tabvalue={Tabvalue} displacement={v_displacement} force={v_force} moment={v_moment} Individualstress={v_individualstress} Cstress={v_cstress} Angulardisplacement={v_angulardisplacement} width={windowSize.width * 0.25} />
             </Box>
           </Box>
-          <Box sx={{ mt: 2, mb: 2, ml: 1, width: '20vw', background: "#FFFFFF" }}>
-            <LoadCaseCombinationList chkbox={Checkboxitems} width={window.innerWidth * 0.2} />
+          <Box sx={{ mt: 2, mb: 2, ml: 1, width:windowSize.width*0.2, background: "#FFFFFF", overflow:"hidden", overflowY:"scroll" }}>
+            <LoadCaseCombinationList chkbox={Checkboxitems} width={windowSize.width * 0.2} height={windowSize.height*0.5} />
           </Box>
         </Stack>
       </BoxComp>
